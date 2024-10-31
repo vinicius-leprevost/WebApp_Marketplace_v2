@@ -1,5 +1,7 @@
-import { cond } from "lodash";
+import pkg from "lodash";
 import mongoose from "mongoose";
+import Category from "./category.model.js";
+import User from "./user.model.js";
 
 const conditionEnum = {
     NEW: "New",
@@ -76,6 +78,30 @@ const ListingSchema = new mongoose.Schema({
     updated: {
         type: Date,
         default: Date.now,
+    }
+});
+
+ListingSchema.pre('save', async function(next) {
+    try {
+        const category = await Category.findById(this.category);
+        if (!category) {
+            throw new Error('Category not found');
+        }
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
+
+ListingSchema.pre('save', async function(next) {
+    try {
+        const user = await User.findById(this.postedBy);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        next();
+    } catch (err) {
+        next(err);
     }
 });
 

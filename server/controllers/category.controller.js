@@ -1,4 +1,4 @@
-import Category from '../models/user.model.js';
+import Category from '../models/category.model.js';
 import extend from 'lodash/extend.js';
 import errorHandler from './error.controller.js';
 
@@ -44,6 +44,10 @@ const list = async (req, res) => {
     }
 };
 
+const read = (req, res) => {
+    return res.json(req.profile);
+};
+
 const update = async (req, res) => {
     try {
         let category = req.profile;
@@ -69,4 +73,15 @@ const remove = async (req, res) => {
     }
 };
 
-export default { create, categoryByID, list, update, remove };
+const removeAll = async (req, res) => {
+    try {
+        await Category.deleteMany({});
+        res.json({ message: "All categories deleted" });
+    } catch (err) {
+        return res.status(400).json({
+            error: errorHandler.getErrorMessage(err),
+        });
+    }
+}
+
+export default { create, categoryByID, read, list, update, remove, removeAll };
