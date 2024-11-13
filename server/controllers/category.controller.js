@@ -35,7 +35,9 @@ const categoryByID = async (req, res, next, id) => {
 
 const list = async (req, res) => {
     try {
-        let categories = await Category.find().select('name description parentCategory');
+        let categories = await Category.find()
+        .select('name description')
+        .populate('parentCategory', 'name');
         res.json(categories);
     } catch (err) {
         return res.status(400).json({
