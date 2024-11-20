@@ -9,8 +9,11 @@ import authRoutes from './routes/auth.routes.js'
 import categoryRoutes from './routes/category.routes.js'
 import listingRoutes from './routes/listing.routes.js'
 import ratingRoutes from './routes/rating.routes.js'
+import path from 'path'
 
 const app = express()
+const CURRENT_WORKING_DIR = process.cwd()
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/', userRoutes)
@@ -18,6 +21,7 @@ app.use('/', authRoutes)
 app.use('/', categoryRoutes)
 app.use('/', listingRoutes)
 app.use('/', ratingRoutes)
+app.use('/dist', express.static(path.join(CURRENT_WORKING_DIR, 'dist')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
