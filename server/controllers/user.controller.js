@@ -3,8 +3,16 @@ import extend from 'lodash/extend.js';
 import errorHandler from './error.controller.js';
 
 const create = async (req, res) => {
-    const user = new User(req.body);
     try {
+        // Check if the email already exists
+        const existingUser = await User.findOne({ email: req.body.email });
+        if (existingUser) {
+            return res.status(400).json({
+                error: 'Email already exists',
+            });
+        }
+
+        const user = new User(req.body);
         await user.save();
         return res.status(200).json({
             message: "User successfully created!",
@@ -79,4 +87,15 @@ const remove = async (req, res) => {
     }
 };
 
-export default { create, userByID, read, list, remove, update };
+const removeAll = async (req, res) => {
+    try {
+        let users = await User.deleteMany();
+        res.json(users);
+    } catch (err) {
+        return res.status(400).json({
+            error: errorHandler.getErrorMessage(err),
+        });
+    }
+};
+
+export default { create, userByID, read, list, remove, update, removeAll };
