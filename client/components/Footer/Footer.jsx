@@ -15,7 +15,7 @@ const Footer = () => {
       <div className="footer-section">
         <h4>Account</h4>
         <ul>
-          <li><a href="/login">Login</a></li>
+          <li><a href="/signin">Login</a></li>
           <li><a href="/signup">Sign Up</a></li>
           <li><a href="/profile">Profile</a></li>
         </ul>

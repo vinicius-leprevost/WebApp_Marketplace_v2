@@ -1,0 +1,24 @@
+.signin-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .signin-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .signin-image img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .signin-form {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
