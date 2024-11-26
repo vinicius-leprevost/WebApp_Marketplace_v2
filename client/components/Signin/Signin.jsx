@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent, Typography, TextField, CardActions, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
+import { Grid, Card, CardContent, Typography, TextField, Button } from '@mui/material';
 import { signin } from '../../frontend-ctrl/api-auth.js';
 import { useAuth } from '../../helpers/auth-context';
-import { useLocation } from 'react-router-dom';
 import './Signin.css';
-import img from '../../assets/signup.png'; 
 
-export default function Signin(props) {
+export default function Signin() {
   const location = useLocation();
   const { login } = useAuth();
   const [values, setValues] = useState({
@@ -35,35 +32,28 @@ export default function Signin(props) {
     });
   };
 
-  const handleChange = name => event => {
+  const handleChange = (name) => (event) => {
     setValues({ ...values, [name]: event.target.value });
   };
 
-  const { from } = location.state || {
-    from: {
-      pathname: '/'
-    }
-  };
+  const { from } = location.state || { from: { pathname: '/' } };
   const { redirectToReferrer } = values;
+
   if (redirectToReferrer) {
     return <Navigate to={from} />;
   }
 
   return (
     <div className="signin-container">
-      <div className="signin-image">
-        <img src={img} alt="Signin" />
-      </div>
-      <div className="signin-form">
-        <Card>
-          <CardContent>
-            <Typography variant="h6">
-              Sign In
+      <Card className="signin-card">
+        <Grid container>
+          <Grid item xs={12} md={6} className="signin-left">
+            <Typography variant="h4" className="signin-title">
+              Welcome Back
             </Typography>
-            {values.error && <Typography color="error" variant="body2">{values.error}</Typography>} {/* Display error if any */}
             <TextField
               id="email"
-              label="Email"
+              label="Email Address"
               value={values.email}
               onChange={handleChange('email')}
               margin="normal"
@@ -72,25 +62,37 @@ export default function Signin(props) {
             <TextField
               id="password"
               label="Password"
+              type="password"
               value={values.password}
               onChange={handleChange('password')}
-              type="password"
               margin="normal"
               fullWidth
             />
-          </CardContent>
-          <CardActions>
-            <Button color="error" variant="contained" onClick={clickSubmit}>
-              Sign In
+            {values.error && (
+              <Typography color="error" variant="body2" className="signin-error">
+                {values.error}
+              </Typography>
+            )}
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={clickSubmit}
+              fullWidth
+              className="signin-button"
+            >
+              Log In
             </Button>
-          </CardActions>
-          <CardActions>
-            <Button color="primary" variant="contained" component={Link} to="/signup">
-              Don't have an account? Sign up
-            </Button>
-          </CardActions>
-        </Card>
-      </div>
+            <Typography variant="body2" align="center" className="signin-footer">
+              Don't have an account? <Link to="/signup">Sign up</Link>
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={6} className="signin-right">
+            <div className="signin-illustration">
+              
+            </div>
+          </Grid>
+        </Grid>
+      </Card>
     </div>
   );
 }

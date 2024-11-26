@@ -4,9 +4,13 @@ import MainRouter from '../MainRouter.jsx';
 
 const App = () => {
   return (
-    <Router>
-      <MainRouter />
-    </Router>
+    <div className='layout'>
+      <div className='content'>
+        <Router>
+          <MainRouter />
+        </Router>
+      </div>
+    </div>
   );
 };
 

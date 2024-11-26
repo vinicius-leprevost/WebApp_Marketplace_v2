@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
     res.json({ message: "Welcome to User application." });
 });
 
-// Start the server
+// Start the serverhow
 app.listen(config.port, (err) => {
     if (err) {
         console.log(err);

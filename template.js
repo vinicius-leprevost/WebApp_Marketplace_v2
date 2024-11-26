@@ -1,6 +1,6 @@
 export default () => {
     return `<!doctype html>
-    <html lang="en"> 
+    <html class="h-full bg-white">
     <head>
     <meta charset="utf-8">
     <title>CanTrade</title> 
@@ -9,7 +9,7 @@ export default () => {
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" 
     rel="stylesheet">
     </head>
-    <body>
+    <body class="h-full">
     <div id="root">Hello World</div>
     <script type="text/javascript“ src="/server/dist/bundle.js"></script> 
     </body>
