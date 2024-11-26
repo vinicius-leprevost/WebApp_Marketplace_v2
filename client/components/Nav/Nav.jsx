@@ -29,7 +29,7 @@ const Nav = () => {
                 <Button color="inherit" component={NavLink} to="/contact" className="navLink" activeClassName="active">Contact</Button>
                 {isAuthenticated ? (
                     <>
-                        <Button color="inherit" onClick={() => logout(() => navigate('/'))} className="navLink">Sign Out</Button>
+                        <Button color="inherit" onClick={() => logout(() => navigate('/signin'))} className="navLink">Sign Out</Button>
                     </>
                 ) : (
                     <>

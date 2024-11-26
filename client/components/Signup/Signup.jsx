@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Grid, Card, Typography, TextField, Button } from "@mui/material";
+import { Card, Typography, TextField, Button, Alert } from "@mui/material"; // Added Alert
 import { create } from "../../frontend-ctrl/api-user.js";
 import "./Signup.css";
-import img from "../../assets/signup.png";
 
 export default function Signup() {
   const [values, setValues] = useState({
@@ -12,13 +11,31 @@ export default function Signup() {
     email: "",
   });
 
+  const [message, setMessage] = useState({ type: "", text: "" }); // State for messages
+
   const navigate = useNavigate();
 
   const handleChange = (name) => (event) => {
     setValues({ ...values, [name]: event.target.value });
   };
 
+  const isValidEmail = (email) => {
+    // Simple regex for email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const clickSubmit = () => {
+    if (!values.name || !values.email || !values.password) {
+      setMessage({ type: "error", text: "Please fill all the fields." });
+      return;
+    }
+
+    if (!isValidEmail(values.email)) {
+      setMessage({ type: "error", text: "Please enter a valid email address." });
+      return;
+    }
+
     const user = {
       name: values.name || undefined,
       email: values.email || undefined,
@@ -26,16 +43,11 @@ export default function Signup() {
     };
 
     create(user).then((data) => {
-      if (data.error || !values.name || !values.email || !values.password) {
-        alert(data.error || "Please fill all the fields.");
-        setValues({
-          name: "",
-          password: "",
-          email: "",
-        });
+      if (data.error) {
+        setMessage({ type: "error", text: data.error });
       } else {
-        alert("Account successfully created. Please sign in.");
-        navigate("/signin");
+        setMessage({ type: "success", text: "Account successfully created. Please sign in." });
+        setTimeout(() => navigate("/signin"), 1500); // Redirect after showing the message
       }
     });
   };
@@ -44,14 +56,19 @@ export default function Signup() {
     <div className="signup-container">
       <Card className="signup-card">
         {/* Left Section: Illustration */}
-        <div className="signup-left">
-        </div>
+        <div className="signup-left"></div>
 
         {/* Right Section: Form */}
         <div className="signup-right">
-          <Typography variant="h4" className="signup-title">
+          <Typography variant="h4" className="signup-title" fontWeight={"bold"}>
             Create an Account
           </Typography>
+          {/* Display Message */}
+          {message.text && (
+            <Alert severity={message.type} className="signup-alert">
+              {message.text}
+            </Alert>
+          )}
           <TextField
             id="name"
             label="Name"
@@ -80,6 +97,7 @@ export default function Signup() {
           <Button
             color="primary"
             variant="contained"
+            size="large"
             onClick={clickSubmit}
             fullWidth
             className="signup-button"

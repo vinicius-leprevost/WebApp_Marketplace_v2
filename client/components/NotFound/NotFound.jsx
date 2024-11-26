@@ -18,7 +18,7 @@ const NotFound = () => {
         The page you are looking for does not exist.
       </Typography>
       <Button variant="contained" color="error" href="/" size='large'>
-        Go to Home
+        Take Me Home
       </Button>
     </Box>
   );

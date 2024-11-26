@@ -1,9 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../helpers/auth-context';
 import './Footer.css'; // Import the CSS file
 
 const Footer = () => {
     const { isAuthenticated, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/signin');
+    }
 
     return (
         <footer className="footer">
@@ -18,7 +25,17 @@ const Footer = () => {
             <div className="footer-section">
                 <h4>Account</h4>
                 <ul>
-                    <li><a href="/signin">Login</a></li>
+                    {!isAuthenticated ? (
+                        <>
+                            <li><a href="/signin">Login</a></li>
+                        </>
+                    ) : (
+                        <li>
+                            <button onClick={() => logout(() => navigate('/signin'))} className="logout-button">
+                                Logout
+                            </button>
+                        </li>
+                    )}
                     <li><a href="/signup">Sign Up</a></li>
                     {isAuthenticated ? (
                         <>
