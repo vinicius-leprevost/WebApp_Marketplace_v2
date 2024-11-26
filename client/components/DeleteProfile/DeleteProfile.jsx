@@ -38,7 +38,7 @@ const DeleteAccount = () => {
 
   return (
     <div className="delete-account-container">
-      <Button variant="contained" color="error" onClick={handleClickOpen} style={{marginTop: '0.5em', width: '100%', marginBottom: '0'}}>
+      <Button variant="outlined" color="error" onClick={handleClickOpen} style={{marginTop: '0.5em', width: '100%', marginBottom: '0'}}>
         Delete Account
       </Button>
       <Dialog open={open} onClose={handleClose}>

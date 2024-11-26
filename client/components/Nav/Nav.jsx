@@ -67,7 +67,7 @@ const Nav = () => {
                                     ],
                                 },
                             }}>
-                            <IconButton color="inherit" component={NavLink} to="/profile">
+                            <IconButton color="inherit" component={NavLink} to="/profile" className="iconButton profile">
                                 <AccountCircleTwoToneIcon />
                             </IconButton>
                         </Tooltip>
@@ -89,7 +89,7 @@ const Nav = () => {
                                     ],
                                 },
                             }}>
-                            <IconButton color="inherit" component={NavLink} to="/favourites">
+                            <IconButton color="inherit" component={NavLink} to="/favourites" className="iconButton favourites">
                                 <FavoriteTwoToneIcon />
                             </IconButton>
                         </Tooltip>
@@ -111,7 +111,7 @@ const Nav = () => {
                                     ],
                                 },
                             }}>
-                            <IconButton color="inherit" component={NavLink} to="/cart">
+                            <IconButton color="inherit" component={NavLink} to="/cart" className="iconButton cart">
                                 <ShoppingCartTwoToneIcon />
                             </IconButton>
                         </Tooltip>

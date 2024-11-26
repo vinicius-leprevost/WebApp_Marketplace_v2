@@ -74,13 +74,13 @@ body {
     color: #333;  /* Dark color for text */
     text-decoration: none;  /* Remove default underline */
     padding: 0.5rem 1rem;
-    transition: color 0.3s ease, text-decoration 0.3s ease;  /* Transition for color and underline */
+    transition: color 0.3s ease, text-decoration 0.3s ease !important;  /* Transition for color and underline */
 }
 
 .navLink:hover,
 .navLink.active {
     color: #0073e6;  /* Change text color on hover to blue */
-    text-decoration: underline;  /* Underline text on hover */
+    text-decoration: underline !important;  /* Underline text on hover */
     border-radius: 4px;
 }
 
@@ -88,3 +88,23 @@ body {
     color: #0073e6;
     text-decoration: underline;
 }
+
+.iconButton {
+    color: inherit;
+    transition: 0.2s color;
+  }
+  
+  /* Hover effect for Profile icon */
+  .iconButton.profile:hover {
+    color: #1972e6;
+  }
+  
+  /* Hover effect for Favourites icon */
+  .iconButton.favourites:hover {
+    color: rgb(212, 22, 22);
+  }
+  
+  /* Hover effect for Cart icon */
+  .iconButton.cart:hover {
+    color: rgb(230, 162, 26);
+  }
