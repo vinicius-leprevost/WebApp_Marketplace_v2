@@ -2,16 +2,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    margin: 6em;
   }
-  
+
   .profile-card {
     width: 400px;
+    padding: 0 6px;
   }
-  
+
+  .hidden {
+    background-color: #f3f3f3;
+    display: none;
+  }
+
   .profile-content {
     display: flex;
     flex-direction: column;
+    /* background-color: blue; */
   }
   
   .profile-header {
@@ -23,4 +30,3 @@
   .profile-title {
     margin-right: 40px; /* Space between 'Profile' text and avatar */
 }
-  

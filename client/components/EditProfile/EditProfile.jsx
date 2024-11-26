@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { read, update } from '../../frontend-ctrl/api-user.js';
 import { useAuth } from '../../helpers/auth-context';
-import { Card, CardContent, Typography, TextField, Button, CircularProgress } from '@mui/material';
+import { Typography, TextField, Button, CircularProgress } from '@mui/material';
 import './EditProfile.css';
 
 const EditProfile = () => {
@@ -15,7 +15,7 @@ const EditProfile = () => {
     email: '',
     password: '',
     error: '',
-    success: false
+    success: false,
   });
 
   useEffect(() => {
@@ -29,21 +29,23 @@ const EditProfile = () => {
       return;
     }
 
-    read({ userId: jwt.user._id }, { t: jwt.token }, signal).then((data) => {
-      if (isMounted) {
-        if (data && data.error) {
-          setRedirectToSignin(true);
-        } else {
-          setUser(data);
-          setValues({ ...values, name: data.name, email: data.email });
-          setLoading(false);
+    read({ userId: jwt.user._id }, { t: jwt.token }, signal)
+      .then((data) => {
+        if (isMounted) {
+          if (data && data.error) {
+            setRedirectToSignin(true);
+          } else {
+            setUser(data);
+            setValues({ ...values, name: data.name, email: data.email });
+            setLoading(false);
+          }
         }
-      }
-    }).catch(err => {
-      if (isMounted) {
-        console.error(err);
-      }
-    });
+      })
+      .catch((err) => {
+        if (isMounted) {
+          console.error(err);
+        }
+      });
 
     return function cleanup() {
       isMounted = false;
@@ -51,7 +53,7 @@ const EditProfile = () => {
     };
   }, [isAuthenticated]);
 
-  const handleChange = name => event => {
+  const handleChange = (name) => (event) => {
     setValues({ ...values, [name]: event.target.value });
   };
 
@@ -60,7 +62,7 @@ const EditProfile = () => {
     const user = {
       name: values.name || undefined,
       email: values.email || undefined,
-      password: values.password || undefined
+      password: values.password || undefined,
     };
 
     update({ userId: jwt.user._id }, { t: jwt.token }, user).then((data) => {
@@ -87,44 +89,49 @@ const EditProfile = () => {
       {loading ? (
         <CircularProgress />
       ) : (
-        <Card className="edit-profile-card">
-          <CardContent>
-            <Typography variant="h6">Edit Profile</Typography>
-            <TextField
-              id="name"
-              label="Name"
-              value={values.name}
-              onChange={handleChange('name')}
-              margin="normal"
-              fullWidth
-            />
-            <TextField
-              id="email"
-              label="Email"
-              value={values.email}
-              onChange={handleChange('email')}
-              margin="normal"
-              fullWidth
-            />
-            <TextField
-              id="password"
-              label="Password"
-              type="password"
-              value={values.password}
-              onChange={handleChange('password')}
-              margin="normal"
-              fullWidth
-            />
-            {values.error && (
-              <Typography color="error" variant="body2">
-                {values.error}
-              </Typography>
-            )}
-          </CardContent>
-          <Button color="primary" variant="contained" onClick={clickSubmit}>
+        <form className="edit-profile-form">
+          <Typography variant="h6" className="form-title">
+            Edit Profile
+          </Typography>
+          <TextField
+            id="name"
+            label="Name"
+            value={values.name}
+            onChange={handleChange('name')}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            id="email"
+            label="Email"
+            value={values.email}
+            onChange={handleChange('email')}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            id="password"
+            label="Password"
+            type="password"
+            value={values.password}
+            onChange={handleChange('password')}
+            margin="normal"
+            fullWidth
+          />
+          {values.error && (
+            <Typography color="error" variant="body2">
+              {values.error}
+            </Typography>
+          )}
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={clickSubmit}
+            className="submit-button"
+          >
             Submit
           </Button>
-        </Card>
+        </form>
       )}
     </div>
   );
