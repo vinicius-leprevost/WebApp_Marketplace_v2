@@ -6,6 +6,7 @@ import Signup from './components/Signup/Signup.jsx';
 import Signin from './components/Signin/Signin.jsx';
 import Footer from './components/Footer/Footer.jsx';
 import NotFound from './components/NotFound/NotFound.jsx';
+import Profile from './components/Profile/Profile.jsx';
 
 const MainRouter = () => {
     return (
@@ -16,6 +17,7 @@ const MainRouter = () => {
                 <Route exact path="/signup" element={<Signup />} />
                 <Route exact path="/signin" element={<Signin />} />
                 <Route exact path='*' element={<NotFound/>}/>
+                <Route exact path="/profile" element={<Profile />} />
             </Routes>
             <Footer />
         </div>
