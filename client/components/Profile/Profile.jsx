@@ -137,6 +137,7 @@ const Profile = () => {
                     {isEditing ? null : <DeleteProfile userId={user._id} />}
                 </CardContent>
                 {isEditing && <EditProfile user={user}/>}
+                
             </Card>
         </div>
     );

@@ -2,17 +2,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 6em;
+    margin: 5em;
   }
 
   .profile-card {
     width: 400px;
     padding: 0 6px;
-  }
-
-  .hidden {
-    background-color: #f3f3f3;
-    display: none;
   }
 
   .profile-content {

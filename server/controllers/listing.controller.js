@@ -17,7 +17,10 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
     try {
-        let listings = await Listing.find().select('title description price category images location condition status postedBy created updated');
+        let listings = await Listing.find()
+        .select('title description price category images location condition status created updated')
+        .populate('postedBy', 'name');
+        console.log(listings);
         res.json(listings);
     } catch (err) {
         return res.status(400).json({
