@@ -1,0 +1,86 @@
+/* ListingCard.css */
+
+/* Card Styles */
+.listing-card {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fdfdfd !important;
+    align-items: center;
+    border-radius: 15px !important;
+    justify-content: center;
+    display: flex;
+    cursor: pointer;
+  }
+  
+  .listing-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Card Media Styles */
+  .listing-card .MuiCardMedia-root {
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  /* Card Content Styles */
+  .card {
+    padding: 16px;
+  }
+  
+  /* Title Styles */
+  .listing-card .MuiTypography-h6 {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  
+  /* Description Styles */
+  .listing-card .MuiTypography-body2 {
+    color: #666;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  
+  /* Price Styles */
+  .listing-card .MuiTypography-body1 {
+    text-align: center;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-top: 8px;
+    margin-bottom: 10px;
+  }
+  
+  /* Condition and Status Styles */
+  .listing-card .MuiTypography-body2 {
+    font-size: 0.875rem;
+    color: #7f8c8d;
+    margin-top: 5px;
+  }
+  
+  /* Tooltip Styles */
+  .MuiTooltip-tooltip {
+    font-size: 0.875rem;
+  }
+  
+  /* Fab Button Styles */
+  .listing-card .MuiFab-root {
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+  
+  .listing-card .MuiFab-root:first-of-type {
+    margin-left: 0;
+  }
+  
+  /* Centering the action buttons (Add to Cart, Add to Favorites) */
+  .fab-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+  }
+  

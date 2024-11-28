@@ -1,0 +1,10 @@
+.listing-list-container {
+    display: flex;
+    justify-content: center; /* Centers the grid horizontally */
+    align-items: center; /* Centers the grid vertically */
+    flex-wrap: wrap; /* Allows content to wrap in the grid */
+    min-height: 62vh; /* Makes the container fill the viewport */
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  

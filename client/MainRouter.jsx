@@ -9,6 +9,7 @@ import NotFound from './components/NotFound/NotFound.jsx';
 import Profile from './components/Profile/Profile.jsx';
 import NewListing from './components/NewListing/NewListing.jsx';
 import Cart from './components/Cart/Cart.jsx';
+import MyListings from './components/MyListings/MyListings.jsx';
 
 const MainRouter = () => {
     return (
@@ -22,6 +23,7 @@ const MainRouter = () => {
                 <Route exact path="/profile" element={<Profile />} />
                 <Route exact path="/newListing" element={<NewListing />} />
                 <Route exact path="/cart" element={<Cart />} />
+                <Route exact path="/myListings" element={<MyListings />} />
             </Routes>
             <Footer />
         </div>

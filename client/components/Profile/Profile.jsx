@@ -153,7 +153,7 @@ const Profile = () => {
                         <Fab
                             color="secondary"
                             aria-label="view"
-                            onClick={() => alert("View Listings triggered")}
+                            onClick={() => navigate("/myListings")}
                             className="fab-button viewListings"
                         >
                             <VisibilityIcon />

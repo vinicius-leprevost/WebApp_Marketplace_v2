@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { CircularProgress, Grid, Typography, Box } from "@mui/material";
+import { CircularProgress, Grid, Typography } from "@mui/material";
 import ListingCard from "../ListingCard/ListingCard";
-import { list } from "../../frontend-ctrl/api-listing";
-import "./Home.css"; // Make sure this file contains the above CSS
+import { list } from "../../frontend-ctrl/api-listing"; // Assuming this function fetches all listings
+import { useAuth } from "../../helpers/auth-context"; // Assuming you have a context for user authentication
+import "./MyListings.css";
 
-const Home = () => {
+const MyListings = () => {
+  const { isAuthenticated } = useAuth(); // Get authentication state (make sure `useAuth` provides this)
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setLoading(false);
+      return;
+    }
+
     const abortController = new AbortController();
     const signal = abortController.signal;
 
@@ -18,7 +25,10 @@ const Home = () => {
         if (data.error) {
           console.error("Error fetching listings:", data.error);
         } else {
-          setListings(data);
+          const userListings = data.filter(
+            (listing) => listing.postedBy._id === isAuthenticated.user._id
+          );
+          setListings(userListings);
         }
       } catch (err) {
         if (err.name !== "AbortError") {
@@ -34,7 +44,7 @@ const Home = () => {
     return () => {
       abortController.abort();
     };
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <div className="listing-list-container">
@@ -43,6 +53,9 @@ const Home = () => {
           <CircularProgress />
         </div>
       ) : listings.length > 0 ? (
+        <>
+
+        <h3>My Listings</h3>
         <Grid container spacing={3} justifyContent="center" alignItems="center">
           {listings.map((listing) => (
             <Grid item xs={12} sm={6} md={4} key={listing._id}>
@@ -50,6 +63,7 @@ const Home = () => {
             </Grid>
           ))}
         </Grid>
+        </>
       ) : (
         <Typography
           variant="h6"
@@ -57,11 +71,11 @@ const Home = () => {
           align="center"
           style={{ marginTop: "50px" }}
         >
-          No listings available at the moment.
+          You have no listings posted.
         </Typography>
       )}
     </div>
   );
 };
 
-export default Home;
+export default MyListings;

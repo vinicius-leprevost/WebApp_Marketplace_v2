@@ -1,11 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../helpers/auth-context";
 import { create } from "../../frontend-ctrl/api-listing";
-import { TextField, Button, Select, MenuItem, Box, Typography, InputLabel, FormControl } from "@mui/material";
+import { list } from "../../frontend-ctrl/api-category";
+import {
+    TextField,
+    Button,
+    Select,
+    MenuItem,
+    Box,
+    Typography,
+    InputLabel,
+    FormControl,
+} from "@mui/material";
 import "./NewListing.css";
 
 const NewListing = () => {
     const { isAuthenticated } = useAuth();
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await list();
+                setCategories(response);
+            } catch (err) {
+                console.error("Error fetching categories:", err);
+            }
+        };
+        fetchCategories();
+    }, []);
+
     const [listing, setListing] = useState({
         title: "",
         description: "",
@@ -20,6 +44,7 @@ const NewListing = () => {
         },
         condition: "",
         status: "Active",
+        postedBy: isAuthenticated.user._id,
     });
 
     const handleChange = (name) => (event) => {
@@ -39,6 +64,7 @@ const NewListing = () => {
             try {
                 const response = await create(listing);
                 console.log("Listing created:", response);
+                console.log(listing);
             } catch (err) {
                 console.error("Error creating listing:", err);
             }
@@ -91,15 +117,24 @@ const NewListing = () => {
                     />
 
                     {/* Category */}
-                    <TextField
-                        label="Category"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={listing.category}
-                        onChange={handleChange("category")}
-                        required
-                    />
+                    <FormControl fullWidth margin="normal">
+                        <InputLabel id="category-label">Category</InputLabel>
+                        <Select
+                            labelId="category-label"
+                            value={listing.category}
+                            onChange={handleChange("category")}
+                            required
+                        >
+                            <MenuItem value="">
+                                <em>Select a category</em>
+                            </MenuItem>
+                            {categories.map((category) => (
+                                <MenuItem key={category._id} value={category._id}>
+                                    {category.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
 
                     {/* Images */}
                     <TextField
@@ -172,21 +207,6 @@ const NewListing = () => {
                             </MenuItem>
                             <MenuItem value="New">New</MenuItem>
                             <MenuItem value="Used">Used</MenuItem>
-                        </Select>
-                    </FormControl>
-
-                    {/* Status */}
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel id="status-label">Status</InputLabel>
-                        <Select
-                            labelId="status-label"
-                            value={listing.status}
-                            onChange={handleChange("status")}
-                            required
-                        >
-                            <MenuItem value="Active">Active</MenuItem>
-                            <MenuItem value="Pending">Pending</MenuItem>
-                            <MenuItem value="Sold">Sold</MenuItem>
                         </Select>
                     </FormControl>
 

@@ -1,4 +1,4 @@
-import Category from '../models/category.model.js';
+import Category from '../models/category.model.js'
 import extend from 'lodash/extend.js';
 import errorHandler from './error.controller.js';
 
