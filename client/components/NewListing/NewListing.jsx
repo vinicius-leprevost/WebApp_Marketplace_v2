@@ -11,12 +11,17 @@ import {
     Typography,
     InputLabel,
     FormControl,
+    IconButton,
+    CircularProgress,
 } from "@mui/material";
+import ImageIcon from "@mui/icons-material/Image";
 import "./NewListing.css";
 
 const NewListing = () => {
     const { isAuthenticated } = useAuth();
     const [categories, setCategories] = useState([]);
+    const [imagePreview, setImagePreview] = useState(null); // for image preview
+    const [imageFile, setImageFile] = useState(null); // for storing the file
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -35,7 +40,7 @@ const NewListing = () => {
         description: "",
         price: "",
         category: "",
-        images: [],
+        images: [], // This will store the image URLs
         location: {
             address: "",
             city: "",
@@ -58,13 +63,39 @@ const NewListing = () => {
         }
     };
 
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setImageFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result); // Set preview of the image
+
+                // Generate URL for image and update images array
+                const imageUrl = URL.createObjectURL(file); // Local URL for preview
+
+                // Add the image URL to the images array
+                setListing((prevListing) => ({
+                    ...prevListing,
+                    images: [...prevListing.images, imageUrl], // Append new image URL to the array
+                }));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (isAuthenticated) {
             try {
+                // If you're uploading the image to a server (e.g., S3), do so here
+                // You can send the image URL (from listing.images) to your backend
+
+                // Example: If the images array has URLs for the uploaded images
+                console.log("Listing object:", listing);
+
                 const response = await create(listing);
                 console.log("Listing created:", response);
-                console.log(listing);
             } catch (err) {
                 console.error("Error creating listing:", err);
             }
@@ -136,20 +167,34 @@ const NewListing = () => {
                         </Select>
                     </FormControl>
 
-                    {/* Images */}
-                    <TextField
-                        label="Images (Comma-separated URLs)"
-                        variant="outlined"
-                        fullWidth
-                        margin="normal"
-                        value={listing.images.join(", ")}
-                        onChange={(e) => {
-                            const imagesArray = e.target.value.split(",").map((img) => img.trim());
-                            setListing({ ...listing, images: imagesArray });
-                        }}
-                    />
+                    {/* Image Upload */}
+                    <Box margin="normal">
+                        <InputLabel htmlFor="image-upload">Upload Image</InputLabel>
+                        <input
+                            type="file"
+                            id="image-upload"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            style={{ display: "none" }}
+                        />
+                        <label htmlFor="image-upload">
+                            <Button variant="outlined" component="span" fullWidth>
+                                <ImageIcon sx={{ marginRight: 1 }} />
+                                Upload Image
+                            </Button>
+                        </label>
+                        {imagePreview && (
+                            <Box sx={{ marginTop: 2, textAlign: "center" }}>
+                                <img
+                                    src={imagePreview}
+                                    alt="Image Preview"
+                                    style={{ width: "100%", maxWidth: "300px", objectFit: "cover" }}
+                                />
+                            </Box>
+                        )}
+                    </Box>
 
-                    {/* Address */}
+                    {/* Location */}
                     <TextField
                         label="Address"
                         variant="outlined"
@@ -160,7 +205,6 @@ const NewListing = () => {
                         required
                     />
 
-                    {/* City */}
                     <TextField
                         label="City"
                         variant="outlined"
@@ -171,7 +215,6 @@ const NewListing = () => {
                         required
                     />
 
-                    {/* Province */}
                     <TextField
                         label="Province"
                         variant="outlined"
@@ -182,7 +225,6 @@ const NewListing = () => {
                         required
                     />
 
-                    {/* Postal Code */}
                     <TextField
                         label="Postal Code"
                         variant="outlined"

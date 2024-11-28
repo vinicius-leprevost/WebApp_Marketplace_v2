@@ -55,7 +55,6 @@ const Home = () => {
           variant="h6"
           color="textSecondary"
           align="center"
-          style={{ marginTop: "50px" }}
         >
           No listings available at the moment.
         </Typography>

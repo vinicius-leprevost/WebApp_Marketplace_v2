@@ -10,7 +10,9 @@
     border-radius: 15px !important;
     justify-content: center;
     display: flex;
+    flex-direction: column;
     cursor: pointer;
+    margin: 30px;
   }
   
   .listing-card:hover {
@@ -82,5 +84,12 @@
     justify-content: center;
     align-items: center;
     margin-top: 15px;
+  }
+
+  .listing-image {
+    width: 100% !important;
+    height: 200px !important;
+    border-radius: 0 !important;
+    border-bottom: 4px solid #e0e0e0 !important;
   }
   

@@ -27,9 +27,9 @@ const ListingCard = ({ listing }) => {
           height="140"
           image={listing.images[0]}
           alt={listing.title || 'Listing image'}
+          className='listing-image'
         />
       )}
-
       <CardContent className="card">
         {listing.title && (
           <Typography variant="h6" className="listing-title">
