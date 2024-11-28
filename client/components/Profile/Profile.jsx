@@ -1,98 +1,90 @@
-import React, { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
-import { read } from '../../frontend-ctrl/api-user.js';
-import { useAuth } from '../../helpers/auth-context';
-import { Card, CardContent, Typography, CircularProgress, Avatar, Button } from '@mui/material';
-import './Profile.css';
-import '../EditProfile/EditProfile.jsx';
-import EditProfile from '../EditProfile/EditProfile.jsx';
-import DeleteProfile from '../DeleteProfile/DeleteProfile.jsx';
+import React, { useState, useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { read } from "../../frontend-ctrl/api-user.js";
+import { useAuth } from "../../helpers/auth-context";
+import { Card, CardContent, Typography, CircularProgress, Avatar, Button, Fab, Tooltip } from "@mui/material";
+import EditProfile from "../EditProfile/EditProfile.jsx";
+import DeleteProfile from "../DeleteProfile/DeleteProfile.jsx";
+import AddIcon from "@mui/icons-material/Add";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import "./Profile.css";
 
 const Profile = () => {
+    const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState(null);
     const [redirectToSignin, setRedirectToSignin] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [loadingUser, setLoadingUser] = useState(true); // New state to handle jwt.user loading
-    const [isEditing, setIsEditing] = useState(false); // New state to control edit mode
+    const [isEditing, setIsEditing] = useState(false);
 
-    function stringAvatar(name) {
-        const nameParts = name.split(' ');
-        const initials = nameParts.length > 1
-            ? `${nameParts[0][0]}${nameParts[1][0]}`
-            : `${nameParts[0][0]}${nameParts[0][1] || ''}`;
+    // Utility functions for generating avatar initials and color
+    const stringAvatar = (name) => {
+        const nameParts = name.split(" ");
+        const initials =
+            nameParts.length > 1
+                ? `${nameParts[0][0]}${nameParts[1][0]}`
+                : `${nameParts[0][0]}${nameParts[0][1] || ""}`;
 
         return {
-            sx: {
-                bgcolor: stringToColor(name),
-            },
+            sx: { bgcolor: stringToColor(name) },
             children: initials.toUpperCase(),
         };
-    }
+    };
 
-    function stringToColor(string) {
+    const stringToColor = (string) => {
         let hash = 0;
-        let i;
-
-        for (i = 0; i < string.length; i += 1) {
+        for (let i = 0; i < string.length; i++) {
             hash = string.charCodeAt(i) + ((hash << 5) - hash);
         }
-
-        let color = '#';
-
-        for (i = 0; i < 3; i += 1) {
+        let color = "#";
+        for (let i = 0; i < 3; i++) {
             const value = (hash >> (i * 8)) & 0xff;
             color += `00${value.toString(16)}`.slice(-2);
         }
-
         return color;
-    }
+    };
 
-    useEffect(() => {
-        // Ensure the authentication context is ready before proceeding
-        if (!isAuthenticated || !isAuthenticated.user) {
-            setLoadingUser(true);
-            return;
-        }
-
-        setLoadingUser(false); // User is loaded, proceed to fetch profile data
-
-        let isMounted = true;
-        const abortController = new AbortController();
-        const signal = abortController.signal;
-
+    // Fetch user data
+    const fetchUserProfile = async () => {
         const jwt = isAuthenticated;
         if (!jwt) {
             setRedirectToSignin(true);
             return;
         }
 
-        read({ userId: jwt.user._id }, { t: jwt.token }, signal).then((data) => {
-            if (isMounted) {
-                if (data && data.error) {
-                    setRedirectToSignin(true);
-                } else {
-                    setUser(data);
-                    setLoading(false);
-                }
+        try {
+            const data = await read({ userId: jwt.user._id }, { t: jwt.token });
+            if (data && data.error) {
+                setRedirectToSignin(true);
+            } else {
+                setUser(data);
+                setLoading(false);
             }
-        }).catch(err => {
-            if (isMounted) {
-                console.error(err);
-            }
-        });
+        } catch (error) {
+            console.error("Error fetching user profile:", error);
+            setRedirectToSignin(true);
+        }
+    };
 
-        return function cleanup() {
-            isMounted = false;
-            abortController.abort();
-        };
+    // Ensure the profile data is fetched once
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            if (!isAuthenticated?.user) {
+                // Refresh the page to ensure authentication context loads
+                window.location.reload();
+            } else {
+                fetchUserProfile();
+            }
+        }, 500);
+    
+        return () => clearTimeout(timeoutId);
     }, [isAuthenticated]);
 
     if (redirectToSignin) {
         return <Navigate to="/signin" />;
     }
 
-    if (loadingUser || loading) {
+    if (loading) {
         return (
             <div className="profile-container">
                 <CircularProgress />
@@ -103,23 +95,31 @@ const Profile = () => {
     return (
         <div className="profile-container">
             <Card className="profile-card">
-                <CardContent className='profile-content'>   
+                <CardContent className="profile-content">
                     <div className="profile-header">
-                        <Avatar {...stringAvatar(user.name)} style={{ marginRight: '0.5em' }} />
-                        <Typography variant="h6" className="profile-title">Profile</Typography>
+                        <Avatar {...stringAvatar(user.name)} style={{ marginRight: "0.5em" }} />
+                        <Typography variant="h6" className="profile-title">
+                            Profile
+                        </Typography>
                     </div>
-                    <Typography variant="body1">Name: <span style={{ fontWeight: 'bold' }}>{user.name}</span></Typography>
-                    <Typography variant="body1">Email: <span style={{ fontWeight: 'bold' }}>{user.email}</span></Typography>
-                    <Typography variant="body1">Joined: <span style={{ fontWeight: 'bold' }}>{new Date(user.created).toDateString()}</span></Typography>
+                    <Typography variant="body1">
+                        Name: <span style={{ fontWeight: "bold" }}>{user.name}</span>
+                    </Typography>
+                    <Typography variant="body1">
+                        Email: <span style={{ fontWeight: "bold" }}>{user.email}</span>
+                    </Typography>
+                    <Typography variant="body1">
+                        Joined: <span style={{ fontWeight: "bold" }}>{new Date(user.created).toDateString()}</span>
+                    </Typography>
 
-                    {/* Button to toggle EditProfile component */}
+                    {/* Edit Profile Button */}
                     {isEditing ? (
                         <Button
                             variant="outlined"
                             color="error"
                             onClick={() => setIsEditing(false)}
-                            style={{ marginTop: '1em' }}
-                            className='toggle-cancel'
+                            style={{ marginTop: "1em" }}
+                            className="toggle-cancel"
                         >
                             Cancel
                         </Button>
@@ -128,16 +128,40 @@ const Profile = () => {
                             variant="outlined"
                             color="success"
                             onClick={() => setIsEditing(true)}
-                            style={{ marginTop: '1em' }}
-                            className='toggle-edit'
+                            style={{ marginTop: "1em" }}
+                            className="toggle-edit"
                         >
                             Edit Profile
                         </Button>
                     )}
                     {isEditing ? null : <DeleteProfile userId={user._id} />}
                 </CardContent>
-                {isEditing && <EditProfile user={user}/>}
-                
+
+                {/* Floating Action Buttons */}
+                <div className="profile-actions">
+                    <Tooltip title="Add Listing" arrow>
+                        <Fab
+                            color="primary"
+                            aria-label="add"
+                            onClick={() => navigate("/newListing")}
+                            className="fab-button addListing"
+                        >
+                            <AddIcon />
+                        </Fab>
+                    </Tooltip>
+                    <Tooltip title="My Listings" arrow>
+                        <Fab
+                            color="secondary"
+                            aria-label="view"
+                            onClick={() => alert("View Listings triggered")}
+                            className="fab-button viewListings"
+                        >
+                            <VisibilityIcon />
+                        </Fab>
+                    </Tooltip>
+                </div>
+
+                {isEditing && <EditProfile user={user} />}
             </Card>
         </div>
     );

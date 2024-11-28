@@ -13,7 +13,7 @@
   .profile-content {
     display: flex;
     flex-direction: column;
-    /* background-color: blue; */
+
   }
   
   .profile-header {
@@ -24,4 +24,28 @@
   
   .profile-title {
     margin-right: 40px; /* Space between 'Profile' text and avatar */
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: left;
+  padding: 0 1em 1em 1em;
+}
+
+.fab-add {
+  position: relative;
+  bottom: 0;
+  margin-top: 1em;
+}
+
+.fab-button {
+  margin: 0.5em !important;
+}
+
+.addListing {
+  background-color: #3576df !important;
+}
+
+.viewListings {
+  background-color: #159b66 !important;
 }

@@ -1,4 +1,5 @@
 import User from '../models/user.model.js';
+import Listing from '../models/listing.model.js';
 import extend from 'lodash/extend.js';
 import errorHandler from './error.controller.js';
 
@@ -76,6 +77,7 @@ const update = async (req, res) => {
 const remove = async (req, res) => {
     try {
         let user = req.profile;
+        await Listing.deleteMany({ postedBy: user._id });
         let deletedUser = await user.deleteOne();
         deletedUser.hashed_password = undefined;
         deletedUser.salt = undefined;
@@ -89,8 +91,14 @@ const remove = async (req, res) => {
 
 const removeAll = async (req, res) => {
     try {
-        let users = await User.deleteMany();
-        res.json(users);
+        const users = await User.find().select('_id');
+        const userIds = users.map((user) => user._id);
+        await User.deleteMany();
+        await Listing.deleteMany({ postedBy: { $in: userIds } });
+
+        res.json({
+            message: "Successfully deleted all users and their associated listings",
+        });
     } catch (err) {
         return res.status(400).json({
             error: errorHandler.getErrorMessage(err),

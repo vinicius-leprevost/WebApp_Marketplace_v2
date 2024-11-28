@@ -17,9 +17,6 @@
     margin-bottom: 0.1rem; /* Space between text fields */
   }
 
-  .MuiCardContent:last-child {
-    padding-bottom: 18px;
-  }
   
   .submit-button {
     margin-top: 1rem;

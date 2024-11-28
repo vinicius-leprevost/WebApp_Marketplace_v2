@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useAuth } from "../../helpers/auth-context";
 import { create } from "../../frontend-ctrl/api-listing";
-import { list as listCategories } from "../../frontend-ctrl/api-category";
-import { TextField, Button, Select, MenuItem, Box, Typography, InputLabel, FormControl, CircularProgress } from "@mui/material";
+import { TextField, Button, Select, MenuItem, Box, Typography, InputLabel, FormControl } from "@mui/material";
+import "./NewListing.css";
 
 const NewListing = () => {
     const { isAuthenticated } = useAuth();
@@ -21,23 +21,6 @@ const NewListing = () => {
         condition: "",
         status: "Active",
     });
-    const [categories, setCategories] = useState([]);
-    const [loadingCategories, setLoadingCategories] = useState(true);
-
-    // Fetch categories on component mount
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await listCategories();
-                setCategories(response);
-            } catch (err) {
-                console.error("Error fetching categories:", err);
-            } finally {
-                setLoadingCategories(false);
-            }
-        };
-        fetchCategories();
-    }, []);
 
     const handleChange = (name) => (event) => {
         if (name in listing.location) {
@@ -108,27 +91,15 @@ const NewListing = () => {
                     />
 
                     {/* Category */}
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel id="category-label">Category</InputLabel>
-                        <Select
-                            labelId="category-label"
-                            value={listing.category}
-                            onChange={handleChange("category")}
-                            required
-                        >
-                            {loadingCategories ? (
-                                <MenuItem disabled>
-                                    <CircularProgress size={20} />
-                                </MenuItem>
-                            ) : (
-                                categories.map((category) => (
-                                    <MenuItem key={category._id} value={category._id}>
-                                        {category.name}
-                                    </MenuItem>
-                                ))
-                            )}
-                        </Select>
-                    </FormControl>
+                    <TextField
+                        label="Category"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        value={listing.category}
+                        onChange={handleChange("category")}
+                        required
+                    />
 
                     {/* Images */}
                     <TextField
