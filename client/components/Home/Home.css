@@ -5,5 +5,6 @@
     flex-wrap: wrap;
     min-height: 62vh;
     box-sizing: border-box;
+    padding: 2em 2em;
   }
   

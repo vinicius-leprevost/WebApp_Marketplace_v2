@@ -11,17 +11,35 @@ import {
     Typography,
     InputLabel,
     FormControl,
-    IconButton,
-    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle 
 } from "@mui/material";
-import ImageIcon from "@mui/icons-material/Image";
-import "./NewListing.css";
+import { set } from "lodash";
 
 const NewListing = () => {
     const { isAuthenticated } = useAuth();
     const [categories, setCategories] = useState([]);
-    const [imagePreview, setImagePreview] = useState(null); // for image preview
-    const [imageFile, setImageFile] = useState(null); // for storing the file
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [errorOpen, setErrorOpen] = useState(false);
+
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+    };
+
+    const handleCloseError = () => {
+        setErrorOpen(false);
+    };
+
+    const localImages = [
+        "/images/listings/img1.jpg",
+        "/images/listings/img2.jpg",
+        "/images/listings/img3.jpg",
+    ];
+
+    let availableImages = [...localImages];
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -40,7 +58,7 @@ const NewListing = () => {
         description: "",
         price: "",
         category: "",
-        images: [], // This will store the image URLs
+        images: [],
         location: {
             address: "",
             city: "",
@@ -49,8 +67,21 @@ const NewListing = () => {
         },
         condition: "",
         status: "Active",
-        postedBy: isAuthenticated.user._id,
+        postedBy: isAuthenticated?.user?._id,
     });
+
+    const getRandomImage = () => {
+        if (availableImages.length === 0) {
+            availableImages = [...localImages];
+        }
+    
+        const randomIndex = Math.floor(Math.random() * availableImages.length);
+        const selectedImage = availableImages[randomIndex];
+    
+        availableImages.splice(randomIndex, 1);
+    
+        return selectedImage;
+    };
 
     const handleChange = (name) => (event) => {
         if (name in listing.location) {
@@ -63,41 +94,30 @@ const NewListing = () => {
         }
     };
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setImageFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result); // Set preview of the image
-
-                // Generate URL for image and update images array
-                const imageUrl = URL.createObjectURL(file); // Local URL for preview
-
-                // Add the image URL to the images array
-                setListing((prevListing) => ({
-                    ...prevListing,
-                    images: [...prevListing.images, imageUrl], // Append new image URL to the array
-                }));
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
     const handleSubmit = async (event) => {
         event.preventDefault();
+    
         if (isAuthenticated) {
+            if (!listing.title || !listing.description || !listing.price || !listing.category || !listing.condition) {
+                setErrorOpen(true);
+                return;
+            }
+            
             try {
-                // If you're uploading the image to a server (e.g., S3), do so here
-                // You can send the image URL (from listing.images) to your backend
-
-                // Example: If the images array has URLs for the uploaded images
-                console.log("Listing object:", listing);
-
-                const response = await create(listing);
+                const randomImage = getRandomImage(); // Use the utility function
+                const listingToSubmit = {
+                    ...listing,
+                    images: [randomImage], // Add the unique image
+                };
+    
+                console.log("Listing object:", listingToSubmit);
+    
+                const response = await create(listingToSubmit);
                 console.log("Listing created:", response);
+                setDialogOpen(true);
             } catch (err) {
                 console.error("Error creating listing:", err);
+                setErrorOpen(true);
             }
         } else {
             console.log("User not authenticated");
@@ -166,33 +186,6 @@ const NewListing = () => {
                             ))}
                         </Select>
                     </FormControl>
-
-                    {/* Image Upload */}
-                    <Box margin="normal">
-                        <InputLabel htmlFor="image-upload">Upload Image</InputLabel>
-                        <input
-                            type="file"
-                            id="image-upload"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            style={{ display: "none" }}
-                        />
-                        <label htmlFor="image-upload">
-                            <Button variant="outlined" component="span" fullWidth>
-                                <ImageIcon sx={{ marginRight: 1 }} />
-                                Upload Image
-                            </Button>
-                        </label>
-                        {imagePreview && (
-                            <Box sx={{ marginTop: 2, textAlign: "center" }}>
-                                <img
-                                    src={imagePreview}
-                                    alt="Image Preview"
-                                    style={{ width: "100%", maxWidth: "300px", objectFit: "cover" }}
-                                />
-                            </Box>
-                        )}
-                    </Box>
 
                     {/* Location */}
                     <TextField
@@ -268,6 +261,47 @@ const NewListing = () => {
                     You must be logged in to create a listing.
                 </Typography>
             )}
+            <Dialog
+                open={dialogOpen}
+                onClose={handleCloseDialog}
+                aria-labelledby="thank-you-dialog-title"
+                aria-describedby="thank-you-dialog-description"
+            >
+                <DialogTitle id="thank-you-dialog-title">
+                    Success
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="thank-you-dialog-description">
+                        New listing successfully created!
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color="primary" autoFocus>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={errorOpen}
+                onClose={handleCloseError}
+                aria-labelledby="thank-you-dialog-title"
+                aria-describedby="thank-you-dialog-description"
+            >
+                <DialogTitle id="thank-you-dialog-title">
+                    Error
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="thank-you-dialog-description">
+                        Unable to create new listing. Please ensure all fields are filled out.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseError} color="error" autoFocus>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 };

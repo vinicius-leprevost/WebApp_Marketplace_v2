@@ -10,6 +10,8 @@ import Profile from './components/Profile/Profile.jsx';
 import NewListing from './components/NewListing/NewListing.jsx';
 import Cart from './components/Cart/Cart.jsx';
 import MyListings from './components/MyListings/MyListings.jsx';
+import About from './components/About/About.jsx';
+import Contact from './components/Contact/Contact.jsx';
 
 const MainRouter = () => {
     return (
@@ -24,6 +26,8 @@ const MainRouter = () => {
                 <Route exact path="/newListing" element={<NewListing />} />
                 <Route exact path="/cart" element={<Cart />} />
                 <Route exact path="/myListings" element={<MyListings />} />
+                <Route exact path="/about" element={<About />} />
+                <Route exact path="/contact" element={<Contact  />} />
             </Routes>
             <Footer />
         </div>

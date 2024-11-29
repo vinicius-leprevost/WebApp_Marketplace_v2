@@ -89,6 +89,28 @@ const Nav = () => {
                                     ],
                                 },
                             }}>
+                            <IconButton color="inherit" component={NavLink} to="/favourites" className="iconButton favourites">
+                                <FavoriteTwoToneIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip
+                            title="Cart"
+                            arrow
+                            slots={{
+                                transition: Zoom,
+                            }}
+                            slotProps={{
+                                popper: {
+                                    modifiers: [
+                                        {
+                                            name: 'offset',
+                                            options: {
+                                                offset: [0, -14],
+                                            },
+                                        },
+                                    ],
+                                },
+                            }}>
                             <IconButton color="inherit" component={NavLink} to="/cart" className="iconButton cart">
                                 <ShoppingCartTwoToneIcon />
                             </IconButton>

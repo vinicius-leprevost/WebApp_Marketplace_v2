@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { CircularProgress, Grid, Typography, Box } from "@mui/material";
 import ListingCard from "../ListingCard/ListingCard";
 import { list } from "../../frontend-ctrl/api-listing";
-import "./Home.css"; // Make sure this file contains the above CSS
+import "./Home.css";
 
 const Home = () => {
   const [listings, setListings] = useState([]);
@@ -43,9 +43,9 @@ const Home = () => {
           <CircularProgress />
         </div>
       ) : listings.length > 0 ? (
-        <Grid container spacing={3} justifyContent="center" alignItems="center">
+        <Grid container justifyContent="center" alignItems="center">
           {listings.map((listing) => (
-            <Grid item xs={12} sm={6} md={4} key={listing._id}>
+            <Grid item xs={12} sm={6} md={4} sx={{mb: -3, ml: -3}} key={listing._id}>
               <ListingCard listing={listing} />
             </Grid>
           ))}

@@ -9,6 +9,7 @@
 
 .signup-card {
   display: flex;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 36px 60px 0px !important;
   flex-direction: row;
   max-width: 1100px; /* Matches Signin card width */
   height: 100%;
