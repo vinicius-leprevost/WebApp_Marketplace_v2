@@ -94,6 +94,7 @@ const removeAll = async (req, res) => {
         const users = await User.find().select('_id');
         const userIds = users.map((user) => user._id);
         await User.deleteMany();
+
         await Listing.deleteMany({ postedBy: { $in: userIds } });
 
         res.json({

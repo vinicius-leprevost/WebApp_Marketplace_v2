@@ -2,7 +2,6 @@
 
 /* Card Styles */
 .listing-card {
-    border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.9s ease-in-out;
     background-color: #fdfdfd !important;
@@ -10,10 +9,12 @@
     border-radius: 15px !important;
     justify-content: center;
     display: flex;
+    border: 1px solid #c1c1c1;
     flex-direction: column;
     cursor: pointer;
     box-shadow: rgba(17, 12, 46, 0.15) 0px 36px 60px 0px !important;
     margin: 30px;
+
   }
   
   .listing-card:hover {

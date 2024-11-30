@@ -12,7 +12,8 @@ import Cart from './components/Cart/Cart.jsx';
 import MyListings from './components/MyListings/MyListings.jsx';
 import About from './components/About/About.jsx';
 import Contact from './components/Contact/Contact.jsx';
-
+import Privacy from './components/Privacy/Privacy.jsx';
+ 
 const MainRouter = () => {
     return (
         <div>
@@ -28,6 +29,7 @@ const MainRouter = () => {
                 <Route exact path="/myListings" element={<MyListings />} />
                 <Route exact path="/about" element={<About />} />
                 <Route exact path="/contact" element={<Contact  />} />
+                <Route exact path="/privacy" element={<Privacy />} />
             </Routes>
             <Footer />
         </div>

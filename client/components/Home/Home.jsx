@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { CircularProgress, Grid, Typography, Box } from "@mui/material";
 import ListingCard from "../ListingCard/ListingCard";
 import { list } from "../../frontend-ctrl/api-listing";
+import logo from "../../assets/logo.png"
 import "./Home.css";
 
 const Home = () => {
@@ -38,24 +39,37 @@ const Home = () => {
 
   return (
     <div className="listing-list-container">
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ padding: 2}}
+      >
+        <img
+          src={logo}
+          alt="CanTrade Logo"
+          style={{ width: "50px", height: "50px", marginRight: "10px" }}
+        />
+        <Typography variant="h4" component="div" fontWeight="bold">
+          CanTrade
+        </Typography>
+      </Box>      
       {loading ? (
         <div style={{ display: "flex", justifyContent: "center", marginTop: "50px" }}>
           <CircularProgress />
         </div>
       ) : listings.length > 0 ? (
-        <Grid container justifyContent="center" alignItems="center">
-          {listings.map((listing) => (
-            <Grid item xs={12} sm={6} md={4} sx={{mb: -3, ml: -3}} key={listing._id}>
-              <ListingCard listing={listing} />
-            </Grid>
-          ))}
-        </Grid>
+        <>
+          <Grid container justifyContent="center" alignItems="center">
+            {listings.map((listing) => (
+              <Grid item xs={12} sm={6} md={4} sx={{ mb: -3, ml: -3 }} key={listing._id}>
+                <ListingCard listing={listing} />
+              </Grid>
+            ))}
+          </Grid>
+        </>
       ) : (
-        <Typography
-          variant="h6"
-          color="textSecondary"
-          align="center"
-        >
+        <Typography variant="h6" color="textSecondary" align="center">
           No listings available at the moment.
         </Typography>
       )}

@@ -1,13 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router';
 import { useAuth } from '../../helpers/auth-context';
 import { Card, CardContent, Typography, CardMedia, Fab, Box, Tooltip } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import './ListingCard.css'; // Import the external CSS file
 
 const ListingCard = ({ listing }) => {
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
+
+  console.log('Current Path:', location.pathname); // Debugging
+
+  const showPublicButtons = location.pathname === '/'; // Public buttons
+  const showPrivateButtons = location.pathname === '/myListings'; // Private buttons
 
   if (!listing.postedBy) return <></>;
 
@@ -19,6 +28,14 @@ const ListingCard = ({ listing }) => {
     console.log(`Added ${listing.title} to favorites!`);
   };
 
+  const handleEditListing = () => {
+    console.log(`Editing ${listing.title}`);
+  };
+
+  const handleDeleteListing = () => {
+    console.log(`Deleting ${listing.title}`);
+  }
+
   return (
     <Card className="listing-card">
       {listing.images && listing.images.length > 0 && (
@@ -27,7 +44,7 @@ const ListingCard = ({ listing }) => {
           height="140"
           image={listing.images[0]}
           alt={listing.title || 'Listing image'}
-          className='listing-image'
+          className="listing-image"
         />
       )}
       <CardContent className="card">
@@ -61,7 +78,8 @@ const ListingCard = ({ listing }) => {
             Posted by: {listing.postedBy.name}
           </Typography>
         )}
-        {isAuthenticated && (
+
+        {isAuthenticated && showPublicButtons && (
           <Box className="fab-container">
             <Tooltip title="Add to Cart" arrow>
               <Fab
@@ -82,6 +100,32 @@ const ListingCard = ({ listing }) => {
                 aria-label="Add to Favorites"
               >
                 <FavoriteIcon />
+              </Fab>
+            </Tooltip>
+          </Box>
+        )}
+
+        {isAuthenticated && showPrivateButtons && (
+          <Box className="fab-container">
+            <Tooltip title="Edit Listing" arrow>
+              <Fab
+                color="primary"
+                size="small"
+                onClick={handleEditListing}
+                aria-label="Edit Listing"
+                sx={{ marginRight: 1 }}
+              >
+                <EditIcon />
+              </Fab>
+            </Tooltip>
+            <Tooltip title="Delete Listing" arrow>
+              <Fab
+                color="secondary"
+                size="small"
+                onClick={handleDeleteListing}
+                aria-label="Delete Listing"
+              >
+                <DeleteIcon />
               </Fab>
             </Tooltip>
           </Box>

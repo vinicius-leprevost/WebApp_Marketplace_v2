@@ -1,7 +1,6 @@
-import pkg from "lodash";
-import mongoose from "mongoose";
 import Category from "./category.model.js";
 import User from "./user.model.js";
+import mongoose from "mongoose";
 
 const conditionEnum = {
     NEW: "New",

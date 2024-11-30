@@ -56,9 +56,9 @@ const MyListings = () => {
         <>
 
         <h3>My Listings</h3>
-        <Grid container spacing={3} justifyContent="center" alignItems="center">
+        <Grid container justifyContent="center" alignItems="center">
           {listings.map((listing) => (
-            <Grid item xs={12} sm={6} md={4} key={listing._id}>
+            <Grid item xs={12} sm={6} md={4} sx={{mb: -3, ml: -3}}key={listing._id}>
               <ListingCard listing={listing} />
             </Grid>
           ))}

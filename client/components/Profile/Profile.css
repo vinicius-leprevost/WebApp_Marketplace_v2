@@ -8,6 +8,8 @@
   .profile-card {
     width: 400px;
     padding: 0 6px;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px !important;
+    border: 1px solid #c1c1c1;
   }
 
   .profile-content {
@@ -30,6 +32,11 @@
   display: flex;
   justify-content: left;
   padding: 0 1em 1em 1em;
+}
+
+* {
+  margin: 0;
+  padding: 0;
 }
 
 .fab-add {
