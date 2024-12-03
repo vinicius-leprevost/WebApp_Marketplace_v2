@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     Box,
     Typography,
@@ -8,49 +8,25 @@ import {
     Divider,
     Grid,
 } from "@mui/material";
-import {useAuth} from "../../helpers/auth-context";
+import { useAuth } from "../../helpers/auth-context";
 import { Add, Remove, Delete } from "@mui/icons-material";
+import { useCart } from "../../helpers/CartContext";
 import "./Cart.css";
 
 const Cart = () => {
-    const { isAuthenticated, logout } = useAuth();
-    const [cartItems, setCartItems] = useState([
-        {
-            id: 1,
-            name: "Product 1",
-            price: 50,
-            quantity: 1,
-            image: "https://via.placeholder.com/80",
-        },
-        {
-            id: 2,
-            name: "Product 2",
-            price: 100,
-            quantity: 2,
-            image: "https://via.placeholder.com/80",
-        },
-    ]);
+    const { isAuthenticated } = useAuth();
+    const { cartItems, incrementQuantity, decrementQuantity, removeFromCart } = useCart();
 
     const handleIncrement = (id) => {
-        setCartItems((prevItems) =>
-            prevItems.map((item) =>
-                item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-            )
-        );
+        incrementQuantity(id);
     };
 
     const handleDecrement = (id) => {
-        setCartItems((prevItems) =>
-            prevItems.map((item) =>
-                item.id === id && item.quantity > 1
-                    ? { ...item, quantity: item.quantity - 1 }
-                    : item
-            )
-        );
+        decrementQuantity(id);
     };
 
     const handleRemove = (id) => {
-        setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+        removeFromCart(id);
     };
 
     const getTotalPrice = () =>
@@ -65,7 +41,7 @@ const Cart = () => {
                 {cartItems.length > 0 ? (
                     <>
                         {cartItems.map((item) => (
-                            <Paper key={item.id} className="cart-item">
+                            <Paper key={item._id} className="cart-item">
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid item xs={3}>
                                         <img
@@ -84,14 +60,14 @@ const Cart = () => {
                                         <Box className="quantity-controls">
                                             <IconButton
                                                 size="small"
-                                                onClick={() => handleDecrement(item.id)}
+                                                onClick={() => handleDecrement(item._id)}
                                             >
                                                 <Remove />
                                             </IconButton>
                                             <Typography>{item.quantity}</Typography>
                                             <IconButton
                                                 size="small"
-                                                onClick={() => handleIncrement(item.id)}
+                                                onClick={() => handleIncrement(item._id)}
                                             >
                                                 <Add />
                                             </IconButton>
@@ -100,7 +76,7 @@ const Cart = () => {
                                     <Grid item xs={2}>
                                         <IconButton
                                             color="error"
-                                            onClick={() => handleRemove(item.id)}
+                                            onClick={() => handleRemove(item._id)}
                                         >
                                             <Delete />
                                         </IconButton>

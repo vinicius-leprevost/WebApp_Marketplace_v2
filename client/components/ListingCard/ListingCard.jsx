@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router';
 import { useAuth } from '../../helpers/auth-context';
+import { useCart } from '../../helpers/CartContext';
 import { Card, CardContent, Typography, CardMedia, Fab, Box, Tooltip } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -11,6 +12,7 @@ import './ListingCard.css'; // Import the external CSS file
 
 const ListingCard = ({ listing }) => {
   const { isAuthenticated } = useAuth();
+  const { addToCart } = useCart();
   const location = useLocation();
 
   console.log('Current Path:', location.pathname); // Debugging
@@ -21,6 +23,7 @@ const ListingCard = ({ listing }) => {
   if (!listing.postedBy) return <></>;
 
   const handleAddToCart = () => {
+    addToCart(listing);
     console.log(`Added ${listing.title} to cart!`);
   };
 
@@ -34,7 +37,7 @@ const ListingCard = ({ listing }) => {
 
   const handleDeleteListing = () => {
     console.log(`Deleting ${listing.title}`);
-  }
+  };
 
   return (
     <Card className="listing-card">
