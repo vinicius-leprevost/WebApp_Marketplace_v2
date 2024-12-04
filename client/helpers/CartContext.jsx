@@ -9,7 +9,6 @@ export const CartProvider = ({ children }) => {
   const { isAuthenticated } = useAuth();
   const [cartItems, setCartItems] = useState([]);
 
-  // Load cart data from local storage when the component mounts
   useEffect(() => {
     if (isAuthenticated) {
       const savedCart = localStorage.getItem(`cart_${isAuthenticated.user._id}`);
@@ -19,7 +18,6 @@ export const CartProvider = ({ children }) => {
     }
   }, [isAuthenticated]);
 
-  // Save cart data to local storage whenever it changes
   useEffect(() => {
     if (isAuthenticated) {
       localStorage.setItem(`cart_${isAuthenticated.user._id}`, JSON.stringify(cartItems));
