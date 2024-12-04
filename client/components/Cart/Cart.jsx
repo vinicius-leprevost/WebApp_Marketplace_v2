@@ -11,7 +11,7 @@ import {
 import { useAuth } from "../../helpers/auth-context";
 import { Add, Remove, Delete } from "@mui/icons-material";
 import { useCart } from "../../helpers/CartContext";
-import "./Cart.css";
+//import "./Cart.css";
 
 const Cart = () => {
     const { isAuthenticated } = useAuth();

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useLocation } from 'react-router';
 import { useAuth } from '../../helpers/auth-context';
 import { useCart } from '../../helpers/CartContext';
+import { useFavourites } from '../../helpers/FavouritesContext';
 import {
   Card,
   CardContent,
@@ -20,13 +21,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import './ListingCard.css'; // Import the external CSS file
 
-const ListingCard = ({ listing }) => {
+const ListingCard = ({ listing, onRemoveFromFavourites }) => {
   const { isAuthenticated } = useAuth();
   const { addToCart } = useCart();
+  const { addToFavourites } = useFavourites();
   const location = useLocation();
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // Default severity is success
 
   const showPublicButtons = location.pathname === '/'; // Public buttons
   const showPrivateButtons = location.pathname === '/myListings'; // Private buttons
@@ -36,6 +39,14 @@ const ListingCard = ({ listing }) => {
   const handleAddToCart = () => {
     addToCart(listing);
     setSnackbarMessage(`${listing.title} added to cart!`);
+    setSnackbarSeverity('success'); // Success for adding to cart
+    setSnackbarOpen(true);
+  };
+
+  const handleAddToFavourites = () => {
+    addToFavourites(listing);
+    setSnackbarMessage(`${listing.title} added to favourites!`);
+    setSnackbarSeverity('success'); // Success for adding to favourites
     setSnackbarOpen(true);
   };
 
@@ -108,7 +119,7 @@ const ListingCard = ({ listing }) => {
                 <Fab
                   color="secondary"
                   size="small"
-                  onClick={() => console.log(`Added ${listing.title} to favorites!`)}
+                  onClick={handleAddToFavourites}
                   aria-label="Add to Favorites"
                 >
                   <FavoriteIcon />
@@ -142,6 +153,34 @@ const ListingCard = ({ listing }) => {
               </Tooltip>
             </Box>
           )}
+          {onRemoveFromFavourites && (
+            <Box 
+              mt={2} 
+              sx={{
+                display: 'flex', 
+                justifyContent: 'center', // Center horizontally
+                alignItems: 'center' // Center vertically
+              }}
+            >
+              <Tooltip title="Remove From Favourites" arrow>
+                <Fab
+                  color="error"
+                  size="small"
+                  onClick={() => {
+                    setSnackbarMessage(`${listing.title} removed from favourites!`); // Set message for snackbar
+                    setSnackbarSeverity('error'); // Set severity to 'error'
+                    setSnackbarOpen(true); // Open snackbar
+                    setTimeout(() => {
+                      onRemoveFromFavourites(); // Call the function after a delay
+                    }, 1200);
+                  }}
+                  aria-label="Remove from Favourites"
+                >
+                  <DeleteIcon />
+                </Fab>
+              </Tooltip>
+            </Box>
+          )}
         </CardContent>
       </Card>
 
@@ -152,7 +191,7 @@ const ListingCard = ({ listing }) => {
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
@@ -162,6 +201,7 @@ const ListingCard = ({ listing }) => {
 
 ListingCard.propTypes = {
   listing: PropTypes.object,
+  onRemoveFromFavourites: PropTypes.func,
 };
 
 export default ListingCard;
