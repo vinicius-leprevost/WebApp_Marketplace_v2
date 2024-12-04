@@ -75,7 +75,11 @@ const ListingCard = ({ listing }) => {
         )}
         {listing.postedBy?.name && (
           <Typography variant="body2" color="textSecondary" className="listing-posted-by">
-            Posted by: {listing.postedBy.name}
+            Posted by: {listing.postedBy.name
+            .toLowerCase()
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ')}
           </Typography>
         )}
 

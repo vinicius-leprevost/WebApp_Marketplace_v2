@@ -47,7 +47,7 @@ const Contact = () => {
     };
 
     return (
-        <Container maxWidth="sm" sx={{ py: 6 }} style={{height: '73vh'}}>
+        <Container maxWidth="sm" sx={{ py: 6 }} style={{height: 'auto'}}>
             <Box sx={{ textAlign: "center", mb: 4 }}>
                 <Typography variant="h4" component="h1" gutterBottom>
                     Contact Us
