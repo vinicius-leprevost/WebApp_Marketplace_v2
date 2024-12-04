@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Card, Typography, TextField, Button, Alert } from "@mui/material";
+import { Card, Typography, TextField, Button, Snackbar, Alert } from "@mui/material";
 import { signin } from "../../frontend-ctrl/api-auth.js";
 import { useAuth } from "../../helpers/auth-context";
 import "./Signin.css";
@@ -14,7 +14,11 @@ export default function Signin() {
     password: "",
   });
 
-  const [message, setMessage] = useState({ type: "", text: "" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    type: "",
+    text: "",
+  });
 
   const handleChange = (name) => (event) => {
     setValues({ ...values, [name]: event.target.value });
@@ -26,9 +30,17 @@ export default function Signin() {
     return emailRegex.test(email);
   };
 
+  const showSnackbar = (type, text) => {
+    setSnackbar({ open: true, type, text });
+  };
+
+  const closeSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+
   const clickSubmit = () => {
     if (!isValidEmail(values.email)) {
-      setMessage({ type: "error", text: "Please enter a valid email address." });
+      showSnackbar("error", "Please enter a valid email address.");
       return;
     }
 
@@ -39,11 +51,14 @@ export default function Signin() {
 
     signin(user).then((data) => {
       if (data.error) {
-        setMessage({ type: "error", text: data.error });
+        showSnackbar("error", data.error);
       } else {
         login(data, () => {
-          setMessage({ type: "success", text: "Welcome back!" });
-          setTimeout(() => navigate("/"), 1500); 
+          showSnackbar("success", "Welcome back!");
+          navigate('/');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         });
       }
     });
@@ -60,12 +75,6 @@ export default function Signin() {
           <Typography variant="h4" className="signin-title" fontWeight={"bold"}>
             Welcome Back
           </Typography>
-          {/* Display Message */}
-          {message.text && (
-            <Alert severity={message.type} className="signin-alert">
-              {message.text}
-            </Alert>
-          )}
           <TextField
             id="email"
             label="Email Address"
@@ -98,6 +107,22 @@ export default function Signin() {
           </Typography>
         </div>
       </Card>
+
+      {/* Snackbar Component */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={closeSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={closeSnackbar}
+          severity={snackbar.type}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.text}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
