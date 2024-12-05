@@ -34,8 +34,8 @@ const Cart = () => {
 
     return (
         isAuthenticated ? (
-            <Box sx={{ maxWidth: "800px", margin: "0 auto", padding: "2rem" }}>
-                <Typography variant="h4" gutterBottom>
+            <Box sx={{ margin: "0 auto", padding: "2rem" }}>
+                <Typography variant="h4" gutterBottom textAlign={'center'} fontWeight={'bold'}>
                     Your Cart
                 </Typography>
                 {cartItems.length > 0 ? (
@@ -95,11 +95,11 @@ const Cart = () => {
                         </Box>
                     </>
                 ) : (
-                    <Typography variant="body1">Your cart is empty.</Typography>
+                    <Typography variant="body1" textAlign={'center'}>Your cart is empty.</Typography>
                 )}
             </Box>
         ) : (
-            <Typography variant="body1" align="center">
+            <Typography variant="body1" textAlign="center" sx={{margin: "2rem"}}>
                 Please log in to view your cart.
             </Typography>
         )

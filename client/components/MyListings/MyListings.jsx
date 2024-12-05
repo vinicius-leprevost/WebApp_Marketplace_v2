@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { CircularProgress, Grid, Typography } from "@mui/material";
 import ListingCard from "../ListingCard/ListingCard";
-import { list } from "../../frontend-ctrl/api-listing"; // Assuming this function fetches all listings
-import { useAuth } from "../../helpers/auth-context"; // Assuming you have a context for user authentication
-import "./MyListings.css";
+import { list } from "../../frontend-ctrl/api-listing"; 
+import { useAuth } from "../../helpers/auth-context"; 
 
 const MyListings = () => {
-  const { isAuthenticated } = useAuth(); // Get authentication state (make sure `useAuth` provides this)
+  const { isAuthenticated } = useAuth(); 
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -55,7 +54,7 @@ const MyListings = () => {
       ) : listings.length > 0 ? (
         <>
 
-        <h3>My Listings</h3>
+        <Typography variant="h4" component="div" fontWeight="bold" textAlign={'center'}>My Listings</Typography>
         <Grid container justifyContent="center" alignItems="center">
           {listings.map((listing) => (
             <Grid item xs={12} sm={6} md={4} sx={{mb: -3, ml: -3}}key={listing._id}>
