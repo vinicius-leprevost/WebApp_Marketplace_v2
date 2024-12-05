@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router';
 import { useAuth } from '../../helpers/auth-context';
+import { remove } from '../../frontend-ctrl/api-listing';
 import { useCart } from '../../helpers/CartContext';
 import { useFavourites } from '../../helpers/FavouritesContext';
 import {
@@ -49,6 +50,34 @@ const ListingCard = ({ listing, onRemoveFromFavourites }) => {
     setSnackbarSeverity('success'); // Success for adding to favourites
     setSnackbarOpen(true);
   };
+
+  const handleRemoveListing = async (listingId, token, onSuccess, onError) => {
+    try {
+      const params = { listingId };
+      const credentials = { t: token };
+  
+      const response = await remove(params, credentials);
+  
+      // Handle the response
+      if (response && response.success) {
+        // If the API indicates success, execute the onSuccess callback
+        if (onSuccess) {
+          onSuccess();
+        }
+      } else {
+        if (onError) {
+          onError(response.error || 'Failed to remove the listing.');
+        }
+      }
+    } catch (err) {
+      // Handle any unexpected errors
+      console.error('Error removing the listing:', err);
+      if (onError) {
+        onError('An unexpected error occurred while removing the listing.');
+      }
+    }
+  };
+
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
