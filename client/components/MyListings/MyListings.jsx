@@ -45,6 +45,12 @@ const MyListings = () => {
     };
   }, [isAuthenticated]);
 
+  const handleListingDeleted = (listingId) => {
+    setListings((prevListings) =>
+      prevListings.filter((listing) => listing._id !== listingId)
+    );
+  };
+
   return (
     <div className="listing-list-container">
       {loading ? (
@@ -58,7 +64,9 @@ const MyListings = () => {
         <Grid container justifyContent="center" alignItems="center">
           {listings.map((listing) => (
             <Grid item xs={12} sm={6} md={4} sx={{mb: -3, ml: -3}}key={listing._id}>
-              <ListingCard listing={listing} />
+              <ListingCard listing={listing}
+              onDeleteSuccess={() => handleListingDeleted(listing._id)}
+               />
             </Grid>
           ))}
         </Grid>

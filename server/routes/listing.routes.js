@@ -1,5 +1,6 @@
 import express from 'express'
 import listingCtrl from '../controllers/listing.controller.js'
+import authCtrl from '../controllers/auth.controller.js'
 
 const router = express.Router();
 
@@ -14,8 +15,5 @@ router.route('/api/listings/:listingId')
     .delete(listingCtrl.remove);
 
 router.param('listingId', listingCtrl.listingByID);
-router.route('/api/listings/:listingId').get(listingCtrl.read);
-router.route('/api/listings/:listingId').put(listingCtrl.update);
-router.route('/api/listings/:listingId').delete(listingCtrl.remove);
 
 export default router;

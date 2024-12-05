@@ -66,7 +66,7 @@ const update = async (req, res) => {
 const remove = async (req, res) => {
     try {
         let listing = req.profile;
-        let deletedListing = await listing.remove();
+        let deletedListing = await listing.deleteOne();
         res.json(deletedListing);
     } catch (err) {
         return res.status(400).json({

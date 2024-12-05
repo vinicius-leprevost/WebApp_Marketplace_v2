@@ -60,20 +60,28 @@ const update = async (params, credentials, user) => {
     }
 }
 
-const remove = async (params, credentials) => {
+const remove = async (params) => {
     try {
-        let response = await fetch('/api/listings/' + params.listingId, {
+        console.log("Listing ID:", params.listingId); // Log listingId
+
+        const response = await fetch('/api/listings/' + params.listingId, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + credentials.t
-            }
-        })
-        return await response.json()
+            },
+        });
+
+        console.log("Response Status:", response.status); // Log response status
+
+        const data = await response.json();
+        console.log("Response Data:", data); // Log response body
+
+        return data;
     } catch (err) {
-        console.log(err)
+        console.error("Error in remove function:", err);
+        throw err; // Re-throw to handle it in the calling function
     }
-}
+};
 
 export { create, list, read, update, remove }
