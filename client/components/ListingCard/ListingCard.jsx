@@ -51,186 +51,205 @@ const ListingCard = ({ listing, onRemoveFromFavourites }) => {
     setSnackbarOpen(true);
   };
 
-  const handleRemoveListing = async (listingId, token, onSuccess, onError) => {
+  const handleRemoveListing = async (listingId, token) => {
     try {
       const params = { listingId };
       const credentials = { t: token };
-  
-      const response = await remove(params, credentials);
-  
-      // Handle the response
+
+      const response = await remove(params, credentials.t);
+
       if (response && response.success) {
-        // If the API indicates success, execute the onSuccess callback
-        if (onSuccess) {
-          onSuccess();
+        setSnackbarMessage(`${listing.title} deleted successfully!`);
+        setSnackbarSeverity('success');
+        setSnackbarOpen(true);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+
+        // Notify parent component about the deletion
+        if (onDeleteSuccess) {
+          onDeleteSuccess();
         }
       } else {
-        if (onError) {
-          onError(response.error || 'Failed to remove the listing.');
-        }
+        throw new Error(response.error || 'Failed to remove the listing.');
       }
     } catch (err) {
-      // Handle any unexpected errors
-      console.error('Error removing the listing:', err);
-      if (onError) {
-        onError('An unexpected error occurred while removing the listing.');
-      }
-    }
+      setSnackbarMessage(`${listing.title} deleted successfully!`);
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+
+    }};
+
+    const handleSnackbarClose = () => {
+      setSnackbarOpen(false);
+    };
+
+    return (
+      <>
+        <Card className="listing-card">
+          {listing.images && listing.images.length > 0 && (
+            <CardMedia
+              component="img"
+              height="140"
+              image={listing.images[0]}
+              alt={listing.title || 'Listing image'}
+              className="listing-image"
+            />
+          )}
+          <CardContent className="card">
+            {listing.title && (
+              <Typography variant="h6" className="listing-title">
+                {listing.title}
+              </Typography>
+            )}
+            {listing.description && (
+              <Typography variant="body2" color="textSecondary" className="listing-description">
+                {listing.description}
+              </Typography>
+            )}
+            {listing.price && (
+              <Typography variant="body1" color="textPrimary" className="listing-price">
+                ${listing.price}
+              </Typography>
+            )}
+            {listing.condition && (
+              <Typography variant="body2" color="textSecondary" className="listing-condition">
+                Condition: {listing.condition}
+              </Typography>
+            )}
+            {listing.status && (
+              <Typography variant="body2" color="textSecondary" className="listing-status">
+                Status: {listing.status}
+              </Typography>
+            )}
+            {listing.postedBy?.name && (
+              <Typography variant="body2" color="textSecondary" className="listing-posted-by">
+                Posted by: {listing.postedBy.name
+                  .toLowerCase()
+                  .split(' ')
+                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(' ')}
+              </Typography>
+            )}
+
+            {isAuthenticated && showPublicButtons && (
+              <Box className="fab-container">
+                <Tooltip title="Add to Cart" arrow>
+                  <Fab
+                    color="primary"
+                    size="small"
+                    onClick={handleAddToCart}
+                    aria-label="Add to Cart"
+                    sx={{ marginRight: 1 }}
+                  >
+                    <AddShoppingCartIcon />
+                  </Fab>
+                </Tooltip>
+                <Tooltip title="Add to Favorites" arrow>
+                  <Fab
+                    color="secondary"
+                    size="small"
+                    onClick={handleAddToFavourites}
+                    aria-label="Add to Favorites"
+                  >
+                    <FavoriteIcon />
+                  </Fab>
+                </Tooltip>
+              </Box>
+            )}
+
+            {isAuthenticated && showPrivateButtons && (
+              <Box className="fab-container">
+                <Tooltip title="Edit Listing" arrow>
+                  <Fab
+                    color="primary"
+                    size="small"
+                    onClick={() => console.log(`Editing ${listing.title}`)}
+                    aria-label="Edit Listing"
+                    sx={{ marginRight: 1 }}
+                  >
+                    <EditIcon />
+                  </Fab>
+                </Tooltip>
+                <Tooltip title="Delete Listing" arrow>
+                  <Fab
+                    color="secondary"
+                    size="small"
+                    onClick={() =>
+                      handleRemoveListing(
+                        listing._id,
+                        isAuthenticated.token,
+                        () => {
+                          setSnackbarMessage(`${listing.title} removed!`); // Set message for snackbar
+                          setSnackbarSeverity('success'); // Set severity to 'success'
+                          setSnackbarOpen(true); // Open snackbar
+                        },
+                        (error) => {
+                          setSnackbarMessage(error); // Set message for snackbar
+                          setSnackbarSeverity('error'); // Set severity to 'error'
+                          setSnackbarOpen(true); // Open snackbar
+                        }
+                      )
+                    }
+                    aria-label="Delete Listing"
+                  >
+                    <DeleteIcon />
+                  </Fab>
+                </Tooltip>
+              </Box>
+            )}
+            {onRemoveFromFavourites && (
+              <Box
+                mt={2}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center', // Center horizontally
+                  alignItems: 'center' // Center vertically
+                }}
+              >
+                <Tooltip title="Remove From Favourites" arrow>
+                  <Fab
+                    color="error"
+                    size="small"
+                    onClick={() => {
+                      setSnackbarMessage(`${listing.title} removed from favourites!`); // Set message for snackbar
+                      setSnackbarSeverity('error'); // Set severity to 'error'
+                      setSnackbarOpen(true); // Open snackbar
+                      setTimeout(() => {
+                        onRemoveFromFavourites(); // Call the function after a delay
+                      }, 1200);
+                    }}
+                    aria-label="Remove from Favourites"
+                  >
+                    <DeleteIcon />
+                  </Fab>
+                </Tooltip>
+              </Box>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Snackbar Component */}
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
+          <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </>
+    );
   };
 
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
+  ListingCard.propTypes = {
+    listing: PropTypes.object,
+    onRemoveFromFavourites: PropTypes.func,
   };
 
-  return (
-    <>
-      <Card className="listing-card">
-        {listing.images && listing.images.length > 0 && (
-          <CardMedia
-            component="img"
-            height="140"
-            image={listing.images[0]}
-            alt={listing.title || 'Listing image'}
-            className="listing-image"
-          />
-        )}
-        <CardContent className="card">
-          {listing.title && (
-            <Typography variant="h6" className="listing-title">
-              {listing.title}
-            </Typography>
-          )}
-          {listing.description && (
-            <Typography variant="body2" color="textSecondary" className="listing-description">
-              {listing.description}
-            </Typography>
-          )}
-          {listing.price && (
-            <Typography variant="body1" color="textPrimary" className="listing-price">
-              ${listing.price}
-            </Typography>
-          )}
-          {listing.condition && (
-            <Typography variant="body2" color="textSecondary" className="listing-condition">
-              Condition: {listing.condition}
-            </Typography>
-          )}
-          {listing.status && (
-            <Typography variant="body2" color="textSecondary" className="listing-status">
-              Status: {listing.status}
-            </Typography>
-          )}
-          {listing.postedBy?.name && (
-            <Typography variant="body2" color="textSecondary" className="listing-posted-by">
-              Posted by: {listing.postedBy.name
-                .toLowerCase()
-                .split(' ')
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ')}
-            </Typography>
-          )}
-
-          {isAuthenticated && showPublicButtons && (
-            <Box className="fab-container">
-              <Tooltip title="Add to Cart" arrow>
-                <Fab
-                  color="primary"
-                  size="small"
-                  onClick={handleAddToCart}
-                  aria-label="Add to Cart"
-                  sx={{ marginRight: 1 }}
-                >
-                  <AddShoppingCartIcon />
-                </Fab>
-              </Tooltip>
-              <Tooltip title="Add to Favorites" arrow>
-                <Fab
-                  color="secondary"
-                  size="small"
-                  onClick={handleAddToFavourites}
-                  aria-label="Add to Favorites"
-                >
-                  <FavoriteIcon />
-                </Fab>
-              </Tooltip>
-            </Box>
-          )}
-
-          {isAuthenticated && showPrivateButtons && (
-            <Box className="fab-container">
-              <Tooltip title="Edit Listing" arrow>
-                <Fab
-                  color="primary"
-                  size="small"
-                  onClick={() => console.log(`Editing ${listing.title}`)}
-                  aria-label="Edit Listing"
-                  sx={{ marginRight: 1 }}
-                >
-                  <EditIcon />
-                </Fab>
-              </Tooltip>
-              <Tooltip title="Delete Listing" arrow>
-                <Fab
-                  color="secondary"
-                  size="small"
-                  onClick={() => console.log(`Deleting ${listing.title}`)}
-                  aria-label="Delete Listing"
-                >
-                  <DeleteIcon />
-                </Fab>
-              </Tooltip>
-            </Box>
-          )}
-          {onRemoveFromFavourites && (
-            <Box 
-              mt={2} 
-              sx={{
-                display: 'flex', 
-                justifyContent: 'center', // Center horizontally
-                alignItems: 'center' // Center vertically
-              }}
-            >
-              <Tooltip title="Remove From Favourites" arrow>
-                <Fab
-                  color="error"
-                  size="small"
-                  onClick={() => {
-                    setSnackbarMessage(`${listing.title} removed from favourites!`); // Set message for snackbar
-                    setSnackbarSeverity('error'); // Set severity to 'error'
-                    setSnackbarOpen(true); // Open snackbar
-                    setTimeout(() => {
-                      onRemoveFromFavourites(); // Call the function after a delay
-                    }, 1200);
-                  }}
-                  aria-label="Remove from Favourites"
-                >
-                  <DeleteIcon />
-                </Fab>
-              </Tooltip>
-            </Box>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Snackbar Component */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-    </>
-  );
-};
-
-ListingCard.propTypes = {
-  listing: PropTypes.object,
-  onRemoveFromFavourites: PropTypes.func,
-};
-
-export default ListingCard;
+  export default ListingCard;
