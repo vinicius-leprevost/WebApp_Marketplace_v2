@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../../helpers/auth-context";
-import { create } from "../../frontend-ctrl/api-listing";
-import { list } from "../../frontend-ctrl/api-category";
+import { useAuth } from "../../helpers/auth-context.jsx";
+import { create } from "../../frontend-ctrl/api-listing.js";
+import { list } from "../../frontend-ctrl/api-category.js";
 import {
     TextField,
     Button,
@@ -17,7 +17,6 @@ import {
     DialogContentText,
     DialogTitle 
 } from "@mui/material";
-import { set } from "lodash";
 
 const NewListing = () => {
     const { isAuthenticated } = useAuth();

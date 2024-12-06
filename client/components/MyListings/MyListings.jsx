@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { CircularProgress, Grid, Typography } from "@mui/material";
-import ListingCard from "../ListingCard/ListingCard";
-import { list } from "../../frontend-ctrl/api-listing"; 
-import { useAuth } from "../../helpers/auth-context"; 
+import ListingCard from "../ListingCard/ListingCard.jsx";
+import { list } from "../../frontend-ctrl/api-listing.js";
+import { useAuth } from "../../helpers/auth-context.jsx";
 
 const MyListings = () => {
-  const { isAuthenticated } = useAuth(); 
+  const { isAuthenticated } = useAuth();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -60,16 +60,16 @@ const MyListings = () => {
       ) : listings.length > 0 ? (
         <>
 
-        <Typography variant="h4" component="div" fontWeight="bold" textAlign={'center'}>My Listings</Typography>
-        <Grid container justifyContent="center" alignItems="center">
-          {listings.map((listing) => (
-            <Grid item xs={12} sm={6} md={4} sx={{mb: -3, ml: -3}}key={listing._id}>
-              <ListingCard listing={listing}
-              onDeleteSuccess={() => handleListingDeleted(listing._id)}
-               />
-            </Grid>
-          ))}
-        </Grid>
+          <Typography variant="h4" component="div" fontWeight="bold" textAlign={'center'}>My Listings</Typography>
+          <Grid container justifyContent="center" alignItems="center">
+            {listings.map((listing) => (
+              <Grid item xs={12} sm={6} md={4} sx={{ mb: -3, ml: -3 }} key={listing._id}>
+                <ListingCard listing={listing}
+                  onDeleteSuccess={() => handleListingDeleted(listing._id)}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </>
       ) : (
         <Typography

@@ -43,14 +43,13 @@ const read = async (params, credentials, signal) => {
     }
 }
 
-const update = async (params, credentials, user) => {
+const update = async (params, user) => {
     try {
-        let response = await fetch('/api/listings/' + params.userId, {
+        let response = await fetch('/api/listings/' + params.listingId, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + credentials.t
             },
             body: JSON.stringify(user)
         })
