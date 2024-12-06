@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useLocation } from 'react-router';
-import { useAuth } from '../../helpers/auth-context';
-import { remove } from '../../frontend-ctrl/api-listing';
-import { useCart } from '../../helpers/CartContext';
-import { useFavourites } from '../../helpers/FavouritesContext';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { useNavigate, useLocation } from "react-router";
+import { useAuth } from "../../helpers/auth-context.jsx";
+import { useParams } from "react-router";
+import { remove } from "../../frontend-ctrl/api-listing.js";
+import { useCart } from "../../helpers/CartContext.jsx";
+import { useFavourites } from "../../helpers/FavouritesContext.jsx";
 import {
   Card,
   CardContent,
@@ -15,14 +16,16 @@ import {
   Tooltip,
   Snackbar,
   Alert,
-} from '@mui/material';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import './ListingCard.css'; // Import the external CSS file
+} from "@mui/material";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import "./ListingCard.css"; // Import the external CSS file
 
 const ListingCard = ({ listing, onRemoveFromFavourites }) => {
+  const navigate = useNavigate();
+  let listingId;
   const { isAuthenticated } = useAuth();
   const { addToCart } = useCart();
   const { addToFavourites } = useFavourites();
@@ -115,6 +118,7 @@ const ListingCard = ({ listing, onRemoveFromFavourites }) => {
                 ${listing.price}
               </Typography>
             )}
+            {}
             {listing.condition && (
               <Typography variant="body2" color="textSecondary" className="listing-condition">
                 Condition: {listing.condition}
@@ -157,6 +161,7 @@ const ListingCard = ({ listing, onRemoveFromFavourites }) => {
                   >
                     <FavoriteIcon />
                   </Fab>
+                  
                 </Tooltip>
               </Box>
             )}
@@ -167,7 +172,7 @@ const ListingCard = ({ listing, onRemoveFromFavourites }) => {
                   <Fab
                     color="primary"
                     size="small"
-                    onClick={() => console.log(`Editing ${listing.title}`)}
+                    onClick={() => console.log(listingId)}
                     aria-label="Edit Listing"
                     sx={{ marginRight: 1 }}
                   >
