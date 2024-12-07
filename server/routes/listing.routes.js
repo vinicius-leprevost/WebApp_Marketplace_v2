@@ -1,19 +1,17 @@
-import express from 'express'
-import listingCtrl from '../controllers/listing.controller.js'
-import authCtrl from '../controllers/auth.controller.js'
+import express from 'express';
+import { upload, create, list, read, update, remove, removeAll, listingByID } from '../controllers/listing.controller.js';
 
 const router = express.Router();
 
 router.route('/api/listings')
-    .get(listingCtrl.list)
-    .post(listingCtrl.create)
-    .delete(listingCtrl.removeAll);
+    .get(list)
+    .post(upload.single('image'), create);
 
 router.route('/api/listings/:listingId')
-    .get(listingCtrl.read)
-    .put(listingCtrl.update)
-    .delete(listingCtrl.remove);
+    .get(read)
+    .put(update)
+    .delete(remove);
 
-router.param('listingId', listingCtrl.listingByID);
+router.param('listingId', listingByID);
 
 export default router;
