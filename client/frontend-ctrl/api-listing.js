@@ -1,14 +1,18 @@
-const create = async (formData) => {
+const create = async (user) => {
     try {
         let response = await fetch('/api/listings/', {
             method: 'POST',
-            body: formData
-        });
-        return await response.json();
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        return await response.json()
     } catch (err) {
-        console.log(err);
+        console.log(err)
     }
-};
+}
 
 const list = async (signal) => {
     try {
