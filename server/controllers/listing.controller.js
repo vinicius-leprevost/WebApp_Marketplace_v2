@@ -2,8 +2,14 @@ import Listing from '../models/listing.model.js';
 import errorHandler from './error.controller.js';
 
 const create = async (req, res) => {
-    const listing = new Listing(req.body);
     try {
+        const { body, file } = req;
+
+        const listing = new Listing({
+            ...body,
+            images: file ? [file.path] : [], // Add the uploaded file path
+        });
+
         await listing.save();
         return res.status(200).json({
             message: "Successfully created listing",
