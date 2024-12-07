@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate, useLocation } from "react-router";
@@ -6,6 +7,13 @@ import { useParams } from "react-router";
 import { remove } from "../../frontend-ctrl/api-listing.js";
 import { useCart } from "../../helpers/CartContext.jsx";
 import { useFavourites } from "../../helpers/FavouritesContext.jsx";
+=======
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { useLocation } from 'react-router';
+import { useAuth } from '../../helpers/auth-context';
+import { useCart } from '../../helpers/CartContext';
+>>>>>>> Stashed changes
 import {
   Card,
   CardContent,
