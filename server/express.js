@@ -13,6 +13,7 @@ import path from 'path'
 
 const app = express()
 const CURRENT_WORKING_DIR = process.cwd()
+app.use("/uploads", express.static(path.join(CURRENT_WORKING_DIR, "../../server/uploads")));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
