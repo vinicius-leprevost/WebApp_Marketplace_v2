@@ -1,18 +1,14 @@
-const create = async (user) => {
+const create = async (formData) => {
     try {
         let response = await fetch('/api/listings/', {
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-        return await response.json()
+            body: formData,
+        });
+        return await response.json();
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
-}
+};
 
 const list = async (signal) => {
     try {
@@ -43,14 +39,13 @@ const read = async (params, credentials, signal) => {
     }
 }
 
-const update = async (params, credentials, user) => {
+const update = async (params, user) => {
     try {
-        let response = await fetch('/api/listings/' + params.userId, {
+        let response = await fetch('/api/listings/' + params.listingId, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + credentials.t
             },
             body: JSON.stringify(user)
         })
@@ -60,20 +55,28 @@ const update = async (params, credentials, user) => {
     }
 }
 
-const remove = async (params, credentials) => {
+const remove = async (params) => {
     try {
-        let response = await fetch('/api/listings/' + params.listingId, {
+        console.log("Listing ID:", params.listingId); // Log listingId
+
+        const response = await fetch('/api/listings/' + params.listingId, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + credentials.t
-            }
-        })
-        return await response.json()
+            },
+        });
+
+        console.log("Response Status:", response.status); // Log response status
+
+        const data = await response.json();
+        console.log("Response Data:", data); // Log response body
+
+        return data;
     } catch (err) {
-        console.log(err)
+        console.error("Error in remove function:", err);
+        throw err; // Re-throw to handle it in the calling function
     }
-}
+};
 
 export { create, list, read, update, remove }

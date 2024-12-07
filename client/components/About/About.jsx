@@ -9,7 +9,7 @@ const About = () => {
         <Container maxWidth="lg" sx={{ py: 6 }}>
             {/* Header Section */}
             <Box sx={{ textAlign: "center", mb: 9 }}>
-                <Typography variant="h3" component="h1">
+                <Typography variant="h4" textAlign={'center'} fontWeight={'bold'}>
                     About Us
                 </Typography>
                 <Typography variant="h6" color="textSecondary">

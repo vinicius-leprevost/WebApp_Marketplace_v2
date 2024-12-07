@@ -49,10 +49,10 @@ const Contact = () => {
     return (
         <Container maxWidth="sm" sx={{ py: 6 }} style={{height: 'auto'}}>
             <Box sx={{ textAlign: "center", mb: 4 }}>
-                <Typography variant="h4" component="h1" gutterBottom>
+                <Typography variant="h4" gutterBottom fontWeight={'bold'}>
                     Contact Us
                 </Typography>
-                <Typography variant="body1" color="textSecondary">
+                <Typography variant="h6" color="textSecondary">
                     We'd love to hear from you. Fill out the form below to get in touch.
                 </Typography>
             </Box>

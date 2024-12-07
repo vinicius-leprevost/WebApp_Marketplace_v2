@@ -14,6 +14,7 @@ import MyListings from './components/MyListings/MyListings.jsx';
 import About from './components/About/About.jsx';
 import Contact from './components/Contact/Contact.jsx';
 import Privacy from './components/Privacy/Privacy.jsx';
+import Favourites from './components/Favourites/Favourites.jsx';
  
 const MainRouter = () => {
     return (
@@ -32,6 +33,7 @@ const MainRouter = () => {
                 <Route exact path="/about" element={<About />} />
                 <Route exact path="/contact" element={<Contact  />} />
                 <Route exact path="/privacy" element={<Privacy />} />
+                <Route exact path="/favourites" element={<Favourites />} />
             </Routes>
             <Footer />
         </div>
