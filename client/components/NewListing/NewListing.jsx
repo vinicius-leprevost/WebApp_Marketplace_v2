@@ -1,14 +1,7 @@
-<<<<<<< Updated upstream
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../helpers/auth-context.jsx";
 import { create } from "../../frontend-ctrl/api-listing.js";
 import { list } from "../../frontend-ctrl/api-category.js";
-=======
-import { useState, useEffect } from "react";
-import { useAuth } from "../../helpers/auth-context";
-import { create } from "../../frontend-ctrl/api-listing";
-import { list } from "../../frontend-ctrl/api-category";
->>>>>>> Stashed changes
 import {
     TextField,
     Button,
@@ -22,7 +15,7 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle,
+    DialogTitle 
 } from "@mui/material";
 
 const NewListing = () => {
@@ -38,6 +31,14 @@ const NewListing = () => {
     const handleCloseError = () => {
         setErrorOpen(false);
     };
+
+    const localImages = [
+        "/images/listings/img1.jpg",
+        "/images/listings/img2.jpg",
+        "/images/listings/img3.jpg",
+    ];
+
+    let availableImages = [...localImages];
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -56,7 +57,7 @@ const NewListing = () => {
         description: "",
         price: "",
         category: "",
-        image: null,
+        images: [],
         location: {
             address: "",
             city: "",
@@ -67,6 +68,19 @@ const NewListing = () => {
         status: "Active",
         postedBy: isAuthenticated?.user?._id,
     });
+
+    const getRandomImage = () => {
+        if (availableImages.length === 0) {
+            availableImages = [...localImages];
+        }
+    
+        const randomIndex = Math.floor(Math.random() * availableImages.length);
+        const selectedImage = availableImages[randomIndex];
+    
+        availableImages.splice(randomIndex, 1);
+    
+        return selectedImage;
+    };
 
     const handleChange = (name) => (event) => {
         if (name in listing.location) {
@@ -79,45 +93,25 @@ const NewListing = () => {
         }
     };
 
-    const handleImageChange = (event) => {
-        console.log(event.target.files[0]);
-        setListing({ ...listing, image: event.target.files[0] });
-    };
-
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+    
         if (isAuthenticated) {
-            if (
-                !listing.title ||
-                !listing.description ||
-                !listing.price ||
-                !listing.category ||
-                !listing.condition ||
-                !listing.image
-            ) {
+            if (!listing.title || !listing.description || !listing.price || !listing.category || !listing.condition) {
                 setErrorOpen(true);
                 return;
             }
-
+            
             try {
-                const formData = new FormData();
-                formData.append("title", listing.title);
-                formData.append("description", listing.description);
-                formData.append("price", listing.price);
-                formData.append("category", listing.category);
-                formData.append("image", listing.image);
-                formData.append("location[address]", listing.location.address);
-                formData.append("location[city]", listing.location.city);
-                formData.append("location[province]", listing.location.province);
-                formData.append("location[postalCode]", listing.location.postalCode);
-                formData.append("condition", listing.condition);
-                formData.append("status", listing.status);
-                formData.append("postedBy", listing.postedBy);
-
-                const response = await create(formData, {
-                    headers: { "Content-Type": "multipart/form-data" },
-                });
+                const randomImage = getRandomImage(); // Use the utility function
+                const listingToSubmit = {
+                    ...listing,
+                    images: [randomImage], // Add the unique image
+                };
+    
+                console.log("Listing object:", listingToSubmit);
+    
+                const response = await create(listingToSubmit);
                 console.log("Listing created:", response);
                 setDialogOpen(true);
             } catch (err) {
@@ -136,6 +130,7 @@ const NewListing = () => {
             </Typography>
             {isAuthenticated ? (
                 <Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
+                    {/* Title */}
                     <TextField
                         label="Title"
                         variant="outlined"
@@ -145,6 +140,8 @@ const NewListing = () => {
                         onChange={handleChange("title")}
                         required
                     />
+
+                    {/* Description */}
                     <TextField
                         label="Description"
                         variant="outlined"
@@ -156,22 +153,8 @@ const NewListing = () => {
                         onChange={handleChange("description")}
                         required
                     />
-                    <Button
-                        variant="outlined"
-                        component="label"
-                        sx={{ marginTop: "1.5rem" }}
-                    >
-                        Upload Image
-                        <input
-                            type="file"
-                            accept="image/*"
-                            hidden
-                            onChange={handleImageChange}
-                        />
-                    </Button>
-                    <Typography variant="caption" display="block">
-                        {listing.image ? listing.image.name : "No image uploaded"}
-                    </Typography>
+
+                    {/* Price */}
                     <TextField
                         label="Price"
                         type="number"
@@ -182,6 +165,8 @@ const NewListing = () => {
                         onChange={handleChange("price")}
                         required
                     />
+
+                    {/* Category */}
                     <FormControl fullWidth margin="normal">
                         <InputLabel id="category-label">Category</InputLabel>
                         <Select
@@ -200,6 +185,8 @@ const NewListing = () => {
                             ))}
                         </Select>
                     </FormControl>
+
+                    {/* Location */}
                     <TextField
                         label="Address"
                         variant="outlined"
@@ -209,6 +196,7 @@ const NewListing = () => {
                         onChange={handleChange("address")}
                         required
                     />
+
                     <TextField
                         label="City"
                         variant="outlined"
@@ -218,6 +206,7 @@ const NewListing = () => {
                         onChange={handleChange("city")}
                         required
                     />
+
                     <TextField
                         label="Province"
                         variant="outlined"
@@ -227,6 +216,7 @@ const NewListing = () => {
                         onChange={handleChange("province")}
                         required
                     />
+
                     <TextField
                         label="Postal Code"
                         variant="outlined"
@@ -236,6 +226,8 @@ const NewListing = () => {
                         onChange={handleChange("postalCode")}
                         required
                     />
+
+                    {/* Condition */}
                     <FormControl fullWidth margin="normal">
                         <InputLabel id="condition-label">Condition</InputLabel>
                         <Select
@@ -251,6 +243,8 @@ const NewListing = () => {
                             <MenuItem value="Used">Used</MenuItem>
                         </Select>
                     </FormControl>
+
+                    {/* Submit Button */}
                     <Button
                         type="submit"
                         variant="contained"
@@ -272,7 +266,9 @@ const NewListing = () => {
                 aria-labelledby="thank-you-dialog-title"
                 aria-describedby="thank-you-dialog-description"
             >
-                <DialogTitle id="thank-you-dialog-title">Success</DialogTitle>
+                <DialogTitle id="thank-you-dialog-title">
+                    Success
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="thank-you-dialog-description">
                         New listing successfully created!
@@ -284,13 +280,16 @@ const NewListing = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+
             <Dialog
                 open={errorOpen}
                 onClose={handleCloseError}
                 aria-labelledby="thank-you-dialog-title"
                 aria-describedby="thank-you-dialog-description"
             >
-                <DialogTitle id="thank-you-dialog-title">Error</DialogTitle>
+                <DialogTitle id="thank-you-dialog-title">
+                    Error
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="thank-you-dialog-description">
                         Unable to create new listing. Please ensure all fields are filled out.
