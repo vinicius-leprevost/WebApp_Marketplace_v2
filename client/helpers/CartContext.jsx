@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useAuth } from './auth-context';
+import { useAuth } from './auth-context.jsx';
 
 const CartContext = createContext();
 
@@ -59,9 +59,13 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  const emptyCart = () => {
+    setCartItems([]);
+  };
+
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, incrementQuantity, decrementQuantity }}
+      value={{ cartItems, addToCart, removeFromCart, incrementQuantity, decrementQuantity, emptyCart }}
     >
       {children}
     </CartContext.Provider>

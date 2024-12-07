@@ -54,8 +54,7 @@ export default function Signin() {
         showSnackbar("error", data.error);
       } else {
         login(data, () => {
-          showSnackbar("success", "Welcome back!");
-          navigate('/');
+          navigate("/");          
           setTimeout(() => {
             window.location.reload();
           }, 1000);
