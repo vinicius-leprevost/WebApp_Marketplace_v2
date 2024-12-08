@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Home from './components/Home/Home.jsx';
 import Nav from './components/Nav/Nav.jsx';
+import Favorites from './components/Favorites/Favorites.jsx';
 import Signup from './components/Signup/Signup.jsx';
 import Signin from './components/Signin/Signin.jsx';
 import Footer from './components/Footer/Footer.jsx';
@@ -25,6 +26,7 @@ const MainRouter = () => {
                 <Route exact path="/signin" element={<Signin />} />
                 <Route exact path='*' element={<NotFound/>}/>
                 <Route exact path="/profile" element={<Profile />} />
+                <Route exact path="/favourites" element={<Favorites />} />
                 <Route exact path="/newListing" element={<NewListing />} />
                 <Route exact path="/cart" element={<Cart />} />
                 <Route exact path="/myListings" element={<MyListings />} />
