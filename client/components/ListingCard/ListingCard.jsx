@@ -78,17 +78,6 @@ const ListingCard = ({ listing }) => {
     }
   };
 
-  const handleModalOpen = () => {
-    document.body.classList.add('modal-active');
-    setModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    document.body.classList.remove('modal-active');
-    setModalOpen(false);
-  };
-
-
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
@@ -131,11 +120,9 @@ const ListingCard = ({ listing }) => {
                 </Typography>
             )}
 
-            {/* Public buttons - Render only if the modal is not open */}
-            {isAuthenticated && showPublicButtons && (
-                <Box
-                    className={`fab-container ${isOpen ? "hidden" : ""}`}
-                >
+            {/* Public buttons */}
+            {isAuthenticated && showPublicButtons && !isOpen && (
+                <Box className="fab-container">
                   <Tooltip title="Add to Cart" arrow>
                     <Fab
                         color="primary"
@@ -216,30 +203,32 @@ const ListingCard = ({ listing }) => {
                   {listing.description}
                 </Typography>
 
-                {/* Buttons for "Add to Cart" and "Add to Favorites" */}
-                <div className="modal-buttons">
-                  <Tooltip title="Add to Cart" arrow>
-                    <Fab
-                        color="primary"
-                        size="small"
-                        onClick={handleAddToCart}
-                        aria-label="Add to Cart"
-                        sx={{ marginRight: 1 }}
-                    >
-                      <AddShoppingCartIcon />
-                    </Fab>
-                  </Tooltip>
-                  <Tooltip title="Add to Favorites" arrow>
-                    <Fab
-                        color="secondary"
-                        size="small"
-                        onClick={handleAddToFavourites}
-                        aria-label="Add to Favorites"
-                    >
-                      <FavoriteIcon />
-                    </Fab>
-                  </Tooltip>
-                </div>
+                {/* Buttons for "Add to Cart" and "Add to Favorites" - Render only in modal */}
+                {isOpen && (
+                    <div className="modal-buttons">
+                      <Tooltip title="Add to Cart" arrow>
+                        <Fab
+                            color="primary"
+                            size="small"
+                            onClick={handleAddToCart}
+                            aria-label="Add to Cart"
+                            sx={{ marginRight: 1 }}
+                        >
+                          <AddShoppingCartIcon />
+                        </Fab>
+                      </Tooltip>
+                      <Tooltip title="Add to Favorites" arrow>
+                        <Fab
+                            color="secondary"
+                            size="small"
+                            onClick={handleAddToFavourites}
+                            aria-label="Add to Favorites"
+                        >
+                          <FavoriteIcon />
+                        </Fab>
+                      </Tooltip>
+                    </div>
+                )}
 
                 <button
                     className="close-button"
