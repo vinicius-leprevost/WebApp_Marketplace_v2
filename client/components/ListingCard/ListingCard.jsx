@@ -31,11 +31,18 @@ const ListingCard = ({ listing }) => {
   const location = useLocation();
 
   const [isOpen, setIsOpen] = useState(false); // Modal state
+  const [showButtons, setShowButtons] = useState(true);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // Default severity is success
 
-  const showPublicButtons = location.pathname === "/"; // Public buttons
+  const toggleModal = () => {
+    setIsOpen(!isOpen);
+    setShowButtons(!isOpen); // Toggle visibility of buttons when modal toggles
+  };
+
+  // const showPublicButtons = location.pathname === "/"; // Public buttons
+  const showPublicButtons = location.pathname === "/" && !isOpen;
   const showPrivateButtons = location.pathname === "/myListings"; // Private buttons
 
   if (!listing.postedBy) return <></>;
@@ -49,7 +56,7 @@ const ListingCard = ({ listing }) => {
 
   const handleAddToFavourites = () => {
     addToFavourites(listing);
-    setSnackbarMessage(`${listing.title} added to favourites!`);
+    setSnackbarMessage(`${listing.title} added to favorites!`);
     setSnackbarSeverity("success");
     setSnackbarOpen(true);
   };
@@ -86,7 +93,7 @@ const ListingCard = ({ listing }) => {
 
   return (
       <>
-        <Card className="listing-card" onClick={() => setIsOpen(true)}>
+        <Card className="listing-card" onClick={toggleModal}>
           {/* Display image if it exists */}
           {listing.images && listing.images.length > 0 && (
               <CardMedia
@@ -143,7 +150,7 @@ const ListingCard = ({ listing }) => {
             )}
 
             {/* Public buttons */}
-            {isAuthenticated && showPublicButtons && !isOpen && (
+            {isAuthenticated && showPublicButtons && showButtons && (
                 <Box className="fab-container">
                   <Tooltip title="Add to Cart" arrow>
                     <Fab
