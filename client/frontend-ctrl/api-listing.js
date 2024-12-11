@@ -1,64 +1,65 @@
 const create = async (formData) => {
     try {
-        let response = await fetch(`/api/listings/`, {
+        const response = await fetch(`/api/listings/`, {
             method: 'POST',
             body: formData,
         });
         return await response.json();
     } catch (err) {
-        console.log(err);
+        console.error("Error in create function:", err);
     }
 };
 
 const list = async (signal) => {
     try {
-        let response = await fetch(`/api/listings/`, {
+        const response = await fetch(`/api/listings/`, {
             method: 'GET',
             signal: signal,
-        })
-        return await response.json()
+        });
+        return await response.json();
     } catch (err) {
-        console.log(err)
+        console.error("Error in list function:", err);
     }
-}
+};
 
 const read = async (params, credentials, signal) => {
     try {
-        let response = await fetch(`/api/listings/` + params.userId, {
+        console.log("Fetching listing with ID:", params.listingId); // Debugging log
+        const response = await fetch(`/api/listings/` + params.listingId, {
             method: 'GET',
             signal: signal,
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + credentials.t
-            }
-        })
-        return await response.json()
+                'Authorization': 'Bearer ' + (credentials?.t || ''), // Optional chaining for safety
+            },
+        });
+        return await response.json();
     } catch (err) {
-        console.log(err)
+        console.error("Error in read function:", err);
     }
-}
+};
 
-const update = async (params, user) => {
+const update = async (params, listingData) => {
     try {
-        let response = await fetch(`/api/listings/` + params.listingId, {
+        console.log("Updating listing with ID:", params.listingId, "Data:", listingData); // Debugging log
+        const response = await fetch(`/api/listings/` + params.listingId, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(user)
-        })
-        return await response.json()
+            body: JSON.stringify(listingData),
+        });
+        return await response.json();
     } catch (err) {
-        console.log(err)
+        console.error("Error in update function:", err);
     }
-}
+};
 
 const remove = async (params) => {
     try {
-        console.log("Listing ID:", params.listingId); // Log listingId
-
+        console.log("Deleting listing with ID:", params.listingId); // Debugging log
         const response = await fetch(`/api/listings/` + params.listingId, {
             method: 'DELETE',
             headers: {
@@ -67,16 +68,13 @@ const remove = async (params) => {
             },
         });
 
-        console.log("Response Status:", response.status); // Log response status
-
+        console.log("Response status for delete:", response.status); // Debugging log
         const data = await response.json();
-        console.log("Response Data:", data); // Log response body
-
+        console.log("Response data for delete:", data); // Debugging log
         return data;
     } catch (err) {
         console.error("Error in remove function:", err);
-        throw err; // Re-throw to handle it in the calling function
     }
 };
 
-export { create, list, read, update, remove }
+export { create, list, read, update, remove };
