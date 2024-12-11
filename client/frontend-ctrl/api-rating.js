@@ -1,8 +1,6 @@
-import apiUrl from './config';
-
 const create = async (rating) => {
     try {
-        let response = await fetch(`${apiUrl}/api/ratings/`, {
+        let response = await fetch(`/api/ratings/`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -18,7 +16,7 @@ const create = async (rating) => {
 
 const list = async (signal) => {
     try {
-        let response = await fetch(`${apiUrl}/api/ratings/`, {
+        let response = await fetch(`/api/ratings/`, {
             method: 'GET',
             signal: signal,
         })
@@ -30,7 +28,7 @@ const list = async (signal) => {
 
 const read = async (params, signal) => {
     try {
-        let response = await fetch(`${apiUrl}/api/ratings/` + params.ratingId, {
+        let response = await fetch(`/api/ratings/` + params.ratingId, {
             method: 'GET',
             signal: signal,
         })
@@ -42,7 +40,7 @@ const read = async (params, signal) => {
 
 const update = async (params, rating) => {
     try {
-        let response = await fetch(`${apiUrl}/api/ratings/` + params.ratingId, {
+        let response = await fetch(`/api/ratings/` + params.ratingId, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -58,7 +56,7 @@ const update = async (params, rating) => {
 
 const remove = async (params) => {
     try {
-        let response = await fetch(`${apiUrl}/api/ratings/` + params.ratingId, {
+        let response = await fetch(`/api/ratings/` + params.ratingId, {
             method: 'DELETE'
         })
         return await response.json()

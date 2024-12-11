@@ -1,8 +1,6 @@
-import apiUrl from './config';
-
 const signin = async (user) => {
     try {
-        let response = await fetch(`${apiUrl}/auth/signin/`, {
+        let response = await fetch(`/auth/signin/`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -18,7 +16,7 @@ const signin = async (user) => {
 }
 const signout = async () => {
     try {
-        let response = await fetch(`${apiUrl}/auth/signout/`, {
+        let response = await fetch(`/auth/signout/`, {
             method: 'GET'
         })
         return await response.json()
