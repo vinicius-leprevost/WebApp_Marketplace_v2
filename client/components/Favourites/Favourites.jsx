@@ -1,4 +1,3 @@
-import React from "react";
 import { useFavourites } from "../../helpers/FavouritesContext";
 import ListingCard from "../ListingCard/ListingCard";
 import { Typography, Grid, Box } from "@mui/material";
