@@ -65,18 +65,20 @@ const ListingCard = ({ listing }) => {
         setSnackbarMessage(`${listing.title} deleted successfully!`);
         setSnackbarSeverity("success");
         setSnackbarOpen(true);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
       } else {
         throw new Error(response.error || "Failed to remove the listing.");
       }
-    } catch (err) {
-      setSnackbarMessage("Error removing listing.");
+    } catch (error) {
+      console.error("Error removing listing:", error);
+      setSnackbarMessage("An error occurred while deleting the listing.");
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
+    } finally {
+      // Reload the webpage after the process
+      window.location.reload();
     }
   };
+
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
