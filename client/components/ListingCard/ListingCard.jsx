@@ -112,6 +112,26 @@ const ListingCard = ({ listing }) => {
                   {listing.description}
                 </Typography>
             )}
+            {listing.condition && (
+                <Typography variant="body2" color="textSecondary" className="listing-condition">
+                  Condition: {listing.condition}
+                </Typography>
+            )}
+            {listing.status && (
+                <Typography variant="body2" color="textSecondary" className="listing-status">
+                  Status: {listing.status}
+                </Typography>
+            )}
+            {listing.postedBy?.name && (
+                <Typography variant="body2" color="textSecondary" className="listing-posted-by">
+                  Posted by:{" "}
+                  {listing.postedBy.name
+                      .toLowerCase()
+                      .split(" ")
+                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                      .join(" ")}
+                </Typography>
+            )}
             {listing.price && (
                 <Typography
                     variant="body1"
@@ -204,6 +224,35 @@ const ListingCard = ({ listing }) => {
                 >
                   {listing.description}
                 </Typography>
+                {listing.condition && (
+                    <Typography variant="body2" color="textSecondary" className="listing-condition">
+                      Condition: {listing.condition}
+                    </Typography>
+                )}
+                {listing.status && (
+                    <Typography variant="body2" color="textSecondary" className="listing-status">
+                      Status: {listing.status}
+                    </Typography>
+                )}
+                {listing.postedBy?.name && (
+                    <Typography variant="body2" color="textSecondary" className="listing-posted-by">
+                      Posted by:{" "}
+                      {listing.postedBy.name
+                          .toLowerCase()
+                          .split(" ")
+                          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                          .join(" ")}
+                    </Typography>
+                )}
+                {listing.price && (
+                    <Typography
+                        variant="body1"
+                        color="textPrimary"
+                        className="listing-price"
+                    >
+                      ${listing.price}
+                    </Typography>
+                )}
 
                 {/* Buttons for "Add to Cart" and "Add to Favorites" - Render only in modal */}
                 {isOpen && (
