@@ -1,6 +1,8 @@
+import apiUrl from './config';
+
 const create = async (formData) => {
     try {
-        let response = await fetch('/api/listings/', {
+        let response = await fetch(`${apiUrl}/api/listings/`, {
             method: 'POST',
             body: formData,
         });
@@ -12,7 +14,7 @@ const create = async (formData) => {
 
 const list = async (signal) => {
     try {
-        let response = await fetch('/api/listings/', {
+        let response = await fetch(`${apiUrl}/api/listings/`, {
             method: 'GET',
             signal: signal,
         })
@@ -24,7 +26,7 @@ const list = async (signal) => {
 
 const read = async (params, credentials, signal) => {
     try {
-        let response = await fetch('/api/listings/' + params.userId, {
+        let response = await fetch(`${apiUrl}/api/listings/` + params.userId, {
             method: 'GET',
             signal: signal,
             headers: {
@@ -41,7 +43,7 @@ const read = async (params, credentials, signal) => {
 
 const update = async (params, user) => {
     try {
-        let response = await fetch('/api/listings/' + params.listingId, {
+        let response = await fetch(`${apiUrl}/api/listings/` + params.listingId, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -59,7 +61,7 @@ const remove = async (params) => {
     try {
         console.log("Listing ID:", params.listingId); // Log listingId
 
-        const response = await fetch('/api/listings/' + params.listingId, {
+        const response = await fetch(`${apiUrl}/api/listings/` + params.listingId, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
